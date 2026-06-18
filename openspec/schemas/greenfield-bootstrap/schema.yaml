@@ -8,12 +8,65 @@ artifacts:
     generates: product-brief.md
     description: Vision, target users, MVP scope, non-goals, and success metrics
     template: product-brief.md
+    instruction: |
+      Create the product brief — the shared answer to "what are we building and
+      why, for whom, and how will we know it worked?"
+
+      Before writing, surface your assumptions explicitly and invite correction
+      (who the user is, why now, what success means, the binding constraint). Do
+      not silently fill ambiguous requirements — that is the most dangerous form
+      of misunderstanding.
+
+      Fill every template section:
+      - **Vision**: the real problem and the desired outcome. Start from the user
+        experience and work back to technology.
+      - **Target Users / Personas**: who has this problem and their context.
+      - **MVP Scope**: the simplest version that still solves the real problem.
+        Say no to almost everything (YAGNI); focus beats breadth.
+      - **Non-Goals**: the explicit "not doing" list — what you deliberately
+        exclude for now.
+      - **Success Metrics**: measurable signals. Reframe vague asks ("make it
+        fast") into concrete targets ("p95 < 200ms on 4G").
+      - **Open Questions**: anything unresolved that needs a human decision.
+
+      Keep it to one page. This brief anchors every later artifact; if scope or
+      users are unclear, stop and ask rather than guess.
     requires: []
 
   - id: constitution
     generates: constitution.md
     description: Project principles, three-tier boundaries, and tech stack; synced into openspec config
     template: constitution.md
+    instruction: |
+      Establish the project's constitution: the durable principles, boundaries,
+      and tech stack that every future change inherits. This is the project's
+      architectural DNA — stable, not per-feature.
+
+      Fill every template section:
+      - **Principles**: 5–10 numbered, durable engineering principles (e.g.
+        "prefer boring technology", "every feature ships with tests and
+        telemetry"). Express them in plain language specific to this project.
+      - **Tech Stack**: languages, frameworks, and key dependencies with
+        versions, each with a one-line rationale.
+      - **Boundaries** (three tiers):
+        - **Always**: non-negotiable practices (run tests before commit,
+          parameterize queries, validate input at the boundary).
+        - **Ask first**: changes needing human approval (new dependency, schema
+          change, new auth flow, CORS or security-header changes).
+        - **Never**: hard prohibitions (commit secrets, delete failing tests,
+          edit vendored code).
+
+      **Sync to OpenSpec config (required):** append a condensed version of the
+      Principles and Boundaries into `openspec/config.yaml` under the top-level
+      `context:` key, so OpenSpec injects them into every future change's
+      instructions. Keep it short — it is injected into every artifact. Example:
+
+      ```yaml
+      context: |
+        Constitution (summary):
+        - Principles: <one line each>
+        - Always: ... | Ask first: ... | Never: ...
+      ```
     requires:
       - product-brief
 
@@ -21,6 +74,27 @@ artifacts:
     generates: requirements.md
     description: Functional requirements in EARS form with testable acceptance criteria
     template: requirements.md
+    instruction: |
+      Define WHAT the system must do, as testable requirements grounded in the
+      product brief and constitution.
+
+      Fill every template section:
+      - **Functional Requirements**: one `### Requirement: <name>` block each,
+        written in EARS form — a trigger then a SHALL response:
+        - Ubiquitous: "The system SHALL <response>."
+        - Event-driven: "WHEN <trigger>, the system SHALL <response>."
+        - State-driven: "WHILE <state>, the system SHALL <response>."
+        - Conditional: "IF <condition>, THEN the system SHALL <response>."
+        Use SHALL/MUST for normative behavior (avoid should/may).
+      - **Acceptance Criteria**: every requirement MUST have at least one
+        testable condition (a future test case). Reframe vague asks into
+        concrete criteria ("fast" -> "p95 < 200ms on 4G").
+      - **Non-Functional Requirements**: performance, availability, and security
+        targets; link them to the architecture quality attributes.
+      - **Out of Scope**: explicit exclusions, mirroring the brief's non-goals.
+
+      Each requirement must be independently verifiable; these feed the
+      acceptance-and-review requirements-to-code traceability table.
     requires:
       - product-brief
       - constitution
