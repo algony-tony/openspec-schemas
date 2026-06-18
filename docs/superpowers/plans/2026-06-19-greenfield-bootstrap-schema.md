@@ -78,23 +78,29 @@ For each artifact:
 
 **Files:**
 - Create: `openspec/schemas/greenfield-bootstrap/schema.yaml`
-- Create: `openspec/schemas/greenfield-bootstrap/templates/*.md` (stubs)
+- Create: `openspec/schemas/greenfield-bootstrap/templates/*.md`
 
-- [ ] **Step 1: Scaffold via init**
+> **Mechanism note (corrected during execution):** `openspec schema init
+> --artifacts` only accepts the built-in ids `proposal,specs,design,tasks` — it
+> rejects custom artifact names. So we **fork** the package schema to get the
+> correct project-local location, then hand-author `schema.yaml`. Because the
+> artifact `instruction` field is **optional**, this task lands a valid
+> structural skeleton (ids/generates/description/template/requires + `apply`,
+> **no instructions**); instructions are added per segment in Tasks 2–15 — no
+> placeholder prose is committed.
+
+- [ ] **Step 1: Fork into the project-local location**
 
 ```bash
-openspec schema init greenfield-bootstrap \
-  --description "Stand up a new full-stack project from idea to a verified, launch-ready MVP" \
-  --artifacts product-brief,constitution,requirements,architecture,api-contract,data-model,quality-strategy,observability,security-baseline,project-scaffold,acceptance-and-review,tasks,launch-readiness \
-  --no-default
+openspec schema fork spec-driven greenfield-bootstrap
 ```
 
-- [ ] **Step 2: Inspect what was created**
+- [ ] **Step 2: Replace templates and write the skeleton schema.yaml**
 
-Run: `ls openspec/schemas/greenfield-bootstrap/templates/ && cat openspec/schemas/greenfield-bootstrap/schema.yaml | head -40`
-Expected: `schema.yaml` with 13 artifact entries and a stub template per artifact.
-If `init` did not create a template file for any artifact, create an empty
-placeholder so validation can pass: `: > openspec/schemas/greenfield-bootstrap/templates/<id>.md`.
+Remove the inherited `proposal.md`/`spec.md`/`design.md` templates, write the 13
+templates from Tasks 2–14, and overwrite `schema.yaml` with the 13-artifact
+skeleton + `apply` block (see the `requires` DAG table above). Leave `instruction`
+fields out for now.
 
 - [ ] **Step 3: Verify it is discoverable and valid**
 

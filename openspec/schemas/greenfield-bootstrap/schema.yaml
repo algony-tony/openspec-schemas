@@ -1,0 +1,112 @@
+name: greenfield-bootstrap
+version: 1
+description: >
+  Stand up a new full-stack project from a fuzzy idea to a verified,
+  launch-ready MVP (DEFINE -> PLAN -> BUILD -> VERIFY -> REVIEW -> SHIP).
+artifacts:
+  - id: product-brief
+    generates: product-brief.md
+    description: Vision, target users, MVP scope, non-goals, and success metrics
+    template: product-brief.md
+    requires: []
+
+  - id: constitution
+    generates: constitution.md
+    description: Project principles, three-tier boundaries, and tech stack; synced into openspec config
+    template: constitution.md
+    requires:
+      - product-brief
+
+  - id: requirements
+    generates: requirements.md
+    description: Functional requirements in EARS form with testable acceptance criteria
+    template: requirements.md
+    requires:
+      - product-brief
+      - constitution
+
+  - id: architecture
+    generates: architecture.md
+    description: System context, component boundaries (C4), ADRs, runtime topology, quality attributes
+    template: architecture.md
+    requires:
+      - requirements
+      - constitution
+
+  - id: api-contract
+    generates: api-contract.md
+    description: Contract-first interfaces, error model, versioning and deprecation
+    template: api-contract.md
+    requires:
+      - architecture
+
+  - id: data-model
+    generates: data-model.md
+    description: Entities/ERD, storage, migrations and seed, data lifecycle
+    template: data-model.md
+    requires:
+      - architecture
+
+  - id: quality-strategy
+    generates: quality-strategy.md
+    description: Test pyramid, TDD discipline, testability seams, coverage gates
+    template: quality-strategy.md
+    requires:
+      - architecture
+
+  - id: observability
+    generates: observability.md
+    description: On-call questions to signals (logs/metrics/traces), health, SLOs and alerts
+    template: observability.md
+    requires:
+      - architecture
+
+  - id: security-baseline
+    generates: security-baseline.md
+    description: Trust boundaries, STRIDE, OWASP controls, abuse cases, data classification
+    template: security-baseline.md
+    requires:
+      - architecture
+
+  - id: project-scaffold
+    generates: project-scaffold.md
+    description: Repo layout, tooling, 12-factor config, CI/CD, IaC, local dev
+    template: project-scaffold.md
+    requires:
+      - architecture
+
+  - id: acceptance-and-review
+    generates: acceptance-and-review.md
+    description: Acceptance criteria, Definition of Done, code-review checklist, requirements-to-code traceability
+    template: acceptance-and-review.md
+    requires:
+      - requirements
+      - quality-strategy
+
+  - id: tasks
+    generates: tasks.md
+    description: TDD build checklist with explicit Verification and Review phases
+    template: tasks.md
+    requires:
+      - architecture
+      - api-contract
+      - data-model
+      - quality-strategy
+      - acceptance-and-review
+      - project-scaffold
+
+  - id: launch-readiness
+    generates: launch-readiness.md
+    description: Pre-launch checklist, rollback plan, runbook
+    template: launch-readiness.md
+    requires:
+      - observability
+      - security-baseline
+      - project-scaffold
+      - acceptance-and-review
+
+apply:
+  requires:
+    - tasks
+    - launch-readiness
+  tracks: tasks.md
