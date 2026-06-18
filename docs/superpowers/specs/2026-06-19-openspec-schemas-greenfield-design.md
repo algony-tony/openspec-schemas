@@ -76,27 +76,31 @@ Two consequences shape the whole design:
 
 ```
 openspec-schemas/
-  schemas/
-    greenfield-bootstrap/
-      schema.yaml
-      templates/*.md
-    <future-schema>/...
-  modules/                # canonical, reusable instruction blocks (composed in)
-    api-contract.md
-    observability.md
-    security-baseline.md
-    ...
-  docs/superpowers/specs/ # design docs
-  CREDITS.md / NOTICE     # attribution
+  openspec/
+    config.yaml
+    schemas/
+      greenfield-bootstrap/
+        schema.yaml
+        templates/*.md
+      <future-schema>/...
+  docs/superpowers/{specs,plans}/   # design docs & implementation plans
+  CREDITS.md / NOTICE               # attribution
   README.md
   CLAUDE.md
 ```
 
-**Distribution** (OpenSpec schema resolution order: project-local → user
-override `${XDG_DATA_HOME}/openspec/schemas/<name>` → package built-in). A
-consumer can: copy a `schemas/<name>/` dir into their project, install it to the
-user-level override dir, or (later) install a published package. v1 targets the
-copy/user-override paths; packaging is a later concern.
+Schemas live under **`openspec/schemas/<name>/`** because OpenSpec resolves
+project-local schemas from `<projectRoot>/openspec/schemas/<name>/schema.yaml`
+(verified in v1.4.1). Storing them there lets this repo dogfood/validate its own
+schemas and makes the directory double as the distribution unit. A shared
+`modules/` directory for reusable instruction blocks is **deferred until a
+second schema needs reuse** (YAGNI).
+
+**Distribution** (resolution order: project-local
+`<root>/openspec/schemas/<name>` → user override
+`${XDG_DATA_HOME}/openspec/schemas/<name>` → package built-in). A consumer
+copies `openspec/schemas/<name>/` into their own project's `openspec/schemas/`,
+or into the user-level override dir. Packaging is a later concern.
 
 ## 5. Flagship: `greenfield-bootstrap` artifact chain
 

@@ -13,10 +13,13 @@ project from a fuzzy idea to a verified, launch-ready MVP. Full design:
 
 ## Repository layout
 
-- `schemas/<name>/` — authored schemas (`schema.yaml` + `templates/*.md`)
-- `modules/` — canonical, reusable instruction blocks composed into schemas
-- `docs/superpowers/specs/` — design docs
+- `openspec/schemas/<name>/` — authored schemas (`schema.yaml` + `templates/*.md`);
+  this is where OpenSpec resolves project-local schemas, so the repo dogfoods them
+- `docs/superpowers/{specs,plans}/` — design docs & implementation plans
 - `CREDITS.md` / `NOTICE` — third-party attribution (all references are MIT)
+
+> A shared `modules/` directory for reusable instruction blocks is deferred until
+> a second schema needs reuse (YAGNI).
 
 ## How OpenSpec schemas work (quick reference)
 
@@ -25,7 +28,7 @@ project from a fuzzy idea to a verified, launch-ready MVP. Full design:
   thin "N/A, because…" artifact.
 - A schema has: `name`, `version`, `description?`, `artifacts[]`, `apply?`.
   **No `extends`/`include`** — share instruction content by maintaining canonical
-  modules in `modules/` and composing them in.
+  modules in the repo and composing (copy/adapt) them into each schema.
 - `openspec/config.yaml` `context` is injected into **every** artifact
   instruction; `rules` are injected per-artifact.
 - Useful commands: `openspec schemas`, `openspec schema validate <name>`,
