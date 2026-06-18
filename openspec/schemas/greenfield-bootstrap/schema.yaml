@@ -103,6 +103,25 @@ artifacts:
     generates: architecture.md
     description: System context, component boundaries (C4), ADRs, runtime topology, quality attributes
     template: architecture.md
+    instruction: |
+      Explain HOW the system is structured and the decisions behind it.
+
+      Fill every template section:
+      - **Context (C4 L1)**: the system in its environment — actors and external
+        systems it talks to.
+      - **Containers / Components (C4 L2–L3)**: the major runtime units
+        (services, apps, stores), their responsibilities, and the boundaries
+        between them.
+      - **Key Decisions (ADRs)**: record each significant choice as an ADR —
+        Context, Decision, Consequences — plus the alternatives you considered
+        and why you rejected them.
+      - **Runtime Topology**: how it is deployed and how requests flow.
+      - **Quality Attributes (-ilities)**: targets across the Well-Architected
+        pillars (reliability, security, performance efficiency, operational
+        excellence, cost). These bind the later -ility artifacts.
+
+      Focus on structure and rationale, not line-by-line implementation. Respect
+      the constitution's principles and tech stack.
     requires:
       - requirements
       - constitution
@@ -111,6 +130,22 @@ artifacts:
     generates: api-contract.md
     description: Contract-first interfaces, error model, versioning and deprecation
     template: api-contract.md
+    instruction: |
+      Design stable interfaces that are hard to misuse — REST/GraphQL endpoints,
+      module boundaries, and any surface where one part talks to another.
+
+      Fill every template section:
+      - **Surfaces**: the external and internal interfaces in scope.
+      - **Resource / Operation Model**: define the contract before implementing
+        it (contract-first) — operations, request/response shapes, status codes.
+      - **Error Model**: a consistent error shape and taxonomy; generic messages
+        that don't leak internals.
+      - **Versioning & Deprecation**: the versioning scheme and a deprecation
+        policy planned at design time.
+
+      Apply Hyrum's Law: every observable behavior becomes a de facto contract,
+      so minimize what you expose and don't leak implementation details. Prefer
+      extending over forking (one version at a time).
     requires:
       - architecture
 
@@ -118,6 +153,19 @@ artifacts:
     generates: data-model.md
     description: Entities/ERD, storage, migrations and seed, data lifecycle
     template: data-model.md
+    instruction: |
+      Define the data the system owns and how it is stored and evolved.
+
+      Fill every template section:
+      - **Entities (ERD)**: entities, key attributes, and relationships.
+      - **Storage**: the datastore choice with rationale (consistency, access
+        patterns, scale), consistent with the architecture.
+      - **Migrations & Seed**: a forward + rollback migration strategy and seed
+        data for local/dev.
+      - **Lifecycle & Retention**: data classification, retention windows, and
+        deletion — coordinate sensitive-data handling with security-baseline.
+
+      The data model informs the API shape; keep the two consistent.
     requires:
       - architecture
 
@@ -125,6 +173,24 @@ artifacts:
     generates: quality-strategy.md
     description: Test pyramid, TDD discipline, testability seams, coverage gates
     template: quality-strategy.md
+    instruction: |
+      Define how the system is tested and kept testable — set the discipline
+      before any code is written.
+
+      Fill every template section:
+      - **Test Pyramid**: what is covered by unit vs integration vs e2e vs
+        contract tests, and roughly the proportions.
+      - **TDD (default discipline)**: TDD is the default — write the failing test
+        first, watch it fail, write the minimal code to pass, refactor. "If you
+        didn't watch the test fail, you don't know it tests the right thing."
+        List the only exceptions (throwaway prototypes, generated code, config),
+        which require human sign-off.
+      - **Testability Seams**: the dependency-injection points, interfaces, and
+        fixtures that let units be tested in isolation.
+      - **Coverage Gates & CI Stages**: coverage thresholds and which test levels
+        run at which CI stage.
+
+      This sets the bar that acceptance-and-review and tasks enforce.
     requires:
       - architecture
 
@@ -132,6 +198,21 @@ artifacts:
     generates: observability.md
     description: On-call questions to signals (logs/metrics/traces), health, SLOs and alerts
     template: observability.md
+    instruction: |
+      Make the system diagnosable from the outside. Instrumentation is written
+      alongside the feature, the same way tests are — never a post-launch add-on.
+
+      Fill every template section:
+      - **On-call Questions**: for each major feature, write the 2–4 questions an
+        on-call engineer will ask ("what fraction of payments retry?"). If you
+        can't name the questions, you're not ready to instrument.
+      - **Signals**: pick the right signal per question — metric (how often / how
+        fast, in aggregate), trace (where time went across services), log (why a
+        specific case happened). Use structured logs: a stable event name plus
+        machine-readable fields, not string interpolation.
+      - **Health & Readiness**: health/readiness endpoints and dependency checks.
+      - **SLOs & Alerts**: SLOs, error budgets, and alert rules tied back to the
+        on-call questions.
     requires:
       - architecture
 
@@ -139,6 +220,27 @@ artifacts:
     generates: security-baseline.md
     description: Trust boundaries, STRIDE, OWASP controls, abuse cases, data classification
     template: security-baseline.md
+    instruction: |
+      Harden the system by design. Treat every external input as hostile, every
+      secret as sacred, and every authorization check as mandatory.
+
+      Threat-model first, then fill every template section:
+      - **Trust Boundaries**: where untrusted data crosses in (HTTP, forms, file
+        uploads, webhooks, third-party APIs, queues, and LLM output).
+      - **Assets**: what is worth stealing or breaking (credentials, PII, payment
+        data, admin actions, money movement).
+      - **STRIDE Review**: run STRIDE over each boundary — Spoofing, Tampering,
+        Repudiation, Information disclosure, Denial of service, Elevation of
+        privilege — with a mitigation for each relevant threat.
+      - **Always-Do Controls (OWASP)**: validate input at the boundary,
+        parameterize queries, encode output, HTTPS everywhere, hash passwords
+        (argon2/bcrypt/scrypt), set security headers, use httpOnly/secure/
+        sameSite cookies, and audit dependencies.
+      - **Abuse Cases**: for each feature, ask "how would I misuse this?" and make
+        that the first test.
+      - **Data Classification**: how PII/secrets are stored and handled.
+
+      Most breaches begin in design (OWASP A04: Insecure Design), not in code.
     requires:
       - architecture
 
@@ -146,6 +248,20 @@ artifacts:
     generates: project-scaffold.md
     description: Repo layout, tooling, 12-factor config, CI/CD, IaC, local dev
     template: project-scaffold.md
+    instruction: |
+      Define how the project is set up so anyone can build, run, and ship it.
+
+      Fill every template section:
+      - **Repo Layout**: the directory structure and what each part is
+        responsible for (split by responsibility, not by technical layer).
+      - **Tooling**: linter, formatter, type checker, package manager, and the
+        exact commands.
+      - **Config & Environments (12-factor)**: configuration in the environment,
+        not in code; how secrets are provided; per-environment config.
+      - **CI/CD**: the pipeline stages and gates (build, test, lint/typecheck,
+        security audit, deploy) — wire in the quality-strategy gates.
+      - **IaC & Local Dev**: an infrastructure-as-code baseline and exact local
+        setup commands (clone -> install -> run in as few steps as possible).
     requires:
       - architecture
 
