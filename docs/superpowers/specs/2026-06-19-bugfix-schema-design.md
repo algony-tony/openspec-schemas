@@ -19,6 +19,9 @@ artifact chain, so the workflow cannot skip root-cause analysis.
   until the cause is confirmed with evidence.
 - **Preserve evidence / reproduce first** — `report` captures verbatim evidence
   and a reliable repro before anyone investigates.
+- **Prevention beyond the test** — `fix` records a systemic guard against the
+  whole class of bug (lint rule, type/invariant, contract test), not just the one
+  regression test.
 - **Regression-test-first** — `tasks` phase 1 is "write a failing regression
   test that reproduces the bug"; the fix follows (red → green), guarding against
   recurrence.
@@ -32,7 +35,7 @@ artifact chain, so the workflow cannot skip root-cause analysis.
 |---|---|---|---|
 | 1 | `report` | capture: symptom, repro, evidence, environment, impact | — |
 | 2 | `root-cause` | Phases 1–3: reproduce, recent changes, hypotheses, confirmed cause | report |
-| 3 | `fix` | Phase 4 plan: root-cause fix, regression test, blast radius, spec impact | root-cause |
+| 3 | `fix` | Phase 4 plan: root-cause fix, regression test, blast radius, spec impact, prevention | root-cause |
 | 4 | `tasks` | TDD: failing regression test → fix → verify symptom gone | fix |
 | — | `apply` | execute + verify; tight loop (re-investigate / question architecture); wide loop (amend spec) | tasks |
 

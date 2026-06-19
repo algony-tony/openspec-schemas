@@ -60,7 +60,7 @@ artifacts:
 
   - id: fix
     generates: fix.md
-    description: Root-cause fix, regression test, blast radius, spec impact
+    description: Root-cause fix, regression test, blast radius, spec impact, prevention
     template: fix.md
     instruction: |
       Plan the fix that addresses the confirmed root cause — never the symptom.
@@ -73,6 +73,10 @@ artifacts:
       - **Spec Impact**: does the bug reveal a spec/requirements gap? If yes, this
         is a spec change (the wide loop), not just a code patch — note the
         follow-up change.
+      - **Prevention**: beyond the one regression test, what systemic change
+        stops this CLASS of bug from recurring (a lint rule, a type/invariant, a
+        contract test, a removed footgun, a runbook note)? State it or say "none
+        warranted, because …".
 
       **Gathering inputs:** most inputs come from root-cause and the code — read
       them first and reuse their answers; ask only about new decisions, one at a

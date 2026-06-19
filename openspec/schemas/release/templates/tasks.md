@@ -14,3 +14,7 @@
 ## 4. Verify
 - [ ] 4.1 Production smoke + monitor dashboards/alerts
 - [ ] 4.2 Send comms / announcement
+
+## 5. Retro
+- [ ] 5.1 Record what went well / badly and any incidents during rollout
+- [ ] 5.2 Capture action items (route defects to a bugfix change; gaps to a feature)

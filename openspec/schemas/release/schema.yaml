@@ -72,7 +72,7 @@ artifacts:
 
   - id: tasks
     generates: tasks.md
-    description: Rollout runbook checklist (Cut -> Stage -> Roll out -> Verify)
+    description: Rollout runbook checklist (Cut -> Stage -> Roll out -> Verify -> Retro)
     template: tasks.md
     instruction: |
       Turn the rollout into a trackable runbook. Every actionable item MUST be a
@@ -84,6 +84,9 @@ artifacts:
       - `## 3. Roll out`: canary / first stage; monitor against the rollout
         criteria; promote — or roll back if a trigger fires.
       - `## 4. Verify`: production smoke + monitor dashboards/alerts; send comms.
+      - `## 5. Retro`: a short post-release retro — what went well/badly, any
+        incidents, and action items (defects → a `bugfix` change; gaps → a
+        `feature`).
 
       **Gathering inputs:** inputs come from preflight/release-plan — read them
       first; ask only about new decisions. If told "just draft it," proceed on

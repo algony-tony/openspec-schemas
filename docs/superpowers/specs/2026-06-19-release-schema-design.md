@@ -31,7 +31,7 @@ pre-launch checklist), git-workflow versioning, and gstack `land-and-deploy`.
 | 1 | `scope` | version, included changes, changelog, audience & risk | — |
 | 2 | `release-plan` | versioning, migration ordering, rollout strategy, rollback, comms | scope |
 | 3 | `preflight` | go/no-go readiness gates + sign-off | release-plan |
-| 4 | `tasks` | rollout runbook (Cut → Stage → Roll out → Verify) | preflight |
+| 4 | `tasks` | rollout runbook (Cut → Stage → Roll out → Verify → Retro) | preflight |
 | — | `apply` | execute rollout; halt+rollback on failure; verify + comms | tasks |
 
 Inherits constitution/quality via openspec config; reuses the two-radius `apply`
