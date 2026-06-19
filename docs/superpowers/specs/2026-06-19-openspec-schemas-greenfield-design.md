@@ -111,16 +111,16 @@ is finalized in the `schema.yaml`.
 |---|---|---|---|---|---|
 | DEFINE | 1 | `product-brief` | Vision, personas, MVP scope, success metrics, non-goals | BMAD Brief / Agent OS mission | — |
 | DEFINE | 2 | `constitution` | Principles + three-tier boundaries (Always/Ask-first/Never) + tech-stack; **writes condensed copy into `openspec/config.yaml` context** | spec-kit constitution / Agent OS standards / agent-skills boundaries | product-brief |
-| DEFINE | 3 | `requirements` | Functional requirements in EARS (WHEN/IF/WHILE) + testable success criteria | Kiro EARS / BMAD PRD | product-brief, constitution |
-| PLAN | 4 | `architecture` | System context, component boundaries (C4), key decisions as ADRs, runtime topology, -ilities targets | BMAD ADR / arc42 / C4 / Well-Architected | requirements, constitution |
+| DEFINE | 3 | `specs` | Capability specs — ADDED requirements in EARS + `#### Scenario`; archived into `openspec/specs/` so `feature` has a baseline | Kiro EARS / BMAD PRD / spec-driven | product-brief, constitution |
+| PLAN | 4 | `architecture` | System context, component boundaries (C4), key decisions as ADRs, runtime topology, -ilities targets | BMAD ADR / arc42 / C4 / Well-Architected | specs, constitution |
 | PLAN | 5 | `api-contract` | Contract-first interfaces, error model, versioning, deprecation (Hyrum's Law) | agent-skills api-and-interface-design | architecture |
 | PLAN | 6 | `data-model` | Entities/ERD, storage choice, migration & seed, data lifecycle/retention | — | architecture |
 | PLAN | 7 | `quality-strategy` | Test pyramid, testability seams, coverage gates, **TDD as default discipline** | agent-skills TDD / superpowers TDD | architecture |
 | PLAN | 8 | `observability` | "On-call three questions" → logs/metrics/traces, health checks, SLO/alerts | agent-skills observability-and-instrumentation | architecture |
 | PLAN | 9 | `security-baseline` | Trust boundaries, STRIDE, OWASP always-do, abuse cases, data classification | agent-skills security-and-hardening / gstack cso | architecture |
 | PLAN | 10 | `project-scaffold` | Repo layout, tooling, config/env (12-factor), CI/CD, IaC, local dev | agent-skills ci-cd / 12-factor | architecture |
-| VERIFY bar | 11 | `acceptance-and-review` | Per-requirement acceptance criteria, Definition of Done, code-review checklist, **requirements↔code traceability plan** | spec-kit /analyze / gstack reviews / superpowers code-review | requirements, quality-strategy |
-| BUILD | 12 | `tasks` | TDD per build task (red/green/commit) + final `## Verification` and `## Review` phases | superpowers writing-plans / Kiro waves | architecture, api-contract, data-model, quality-strategy, acceptance-and-review, project-scaffold |
+| VERIFY bar | 11 | `acceptance-and-review` | Per-requirement acceptance criteria, Definition of Done, code-review checklist, **requirements↔code traceability plan** | spec-kit /analyze / gstack reviews / superpowers code-review | specs, quality-strategy |
+| BUILD | 12 | `tasks` | TDD per build task (red/green/commit) + final `## Verification` and `## Review` phases | superpowers writing-plans / Kiro waves | architecture, api-contract, data-model, quality-strategy, observability, security-baseline, acceptance-and-review, project-scaffold |
 | SHIP | 13 | `launch-readiness` | Pre-launch checklist: CI green, observability wired, security pass, rollback/runbook, staging smoke | agent-skills shipping-and-launch / gstack land-and-deploy | observability, security-baseline, project-scaffold, acceptance-and-review |
 
 `apply`: `requires: [tasks, launch-readiness]`, `tracks: tasks.md`, with the
@@ -226,7 +226,7 @@ first, so it only asks about what is genuinely new.
 To keep this coherent rather than 13 disjoint interrogations, every artifact
 instruction carries a **Gathering inputs** protocol (progressive interviewing):
 
-- **DEFINE artifacts** (`product-brief`, `constitution`, `requirements`) are the
+- **DEFINE artifacts** (`product-brief`, `constitution`, `specs`) are the
   **primary interview** — gather broadly so later artifacts can mostly
   synthesize.
 - **PLAN/VERIFY/SHIP artifacts** lean on dependencies — read them first, reuse

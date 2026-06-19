@@ -80,31 +80,32 @@ artifacts:
     requires:
       - product-brief
 
-  - id: requirements
-    generates: requirements.md
-    description: Functional requirements in EARS form with testable acceptance criteria
-    template: requirements.md
+  - id: specs
+    generates: "specs/**/*.md"
+    description: Capability specs (ADDED requirements) in EARS form with acceptance scenarios
+    template: spec.md
     instruction: |
-      Define WHAT the system must do, as testable requirements grounded in the
-      product brief and constitution.
+      Define WHAT the system must do as capability specs, grounded in the product
+      brief and constitution. Create one file per capability at
+      `specs/<capability>/spec.md` (kebab-case capability names). For a greenfield
+      project these are all new, so use the `## ADDED Requirements` header.
 
-      Fill every template section:
-      - **Functional Requirements**: one `### Requirement: <name>` block each,
-        written in EARS form — a trigger then a SHALL response:
-        - Ubiquitous: "The system SHALL <response>."
-        - Event-driven: "WHEN <trigger>, the system SHALL <response>."
-        - State-driven: "WHILE <state>, the system SHALL <response>."
-        - Conditional: "IF <condition>, THEN the system SHALL <response>."
-        Use SHALL/MUST for normative behavior (avoid should/may).
-      - **Acceptance Criteria**: every requirement MUST have at least one
-        testable condition (a future test case). Reframe vague asks into
-        concrete criteria ("fast" -> "p95 < 200ms on 4G").
-      - **Non-Functional Requirements**: performance, availability, and security
-        targets; link them to the architecture quality attributes.
-      - **Out of Scope**: explicit exclusions, mirroring the brief's non-goals.
+      Use the OpenSpec spec format (this is what `openspec archive` merges into
+      `openspec/specs/`):
+      - `### Requirement: <name>` written in EARS form — a trigger then a SHALL
+        response (Ubiquitous "The system SHALL …"; Event-driven "WHEN <trigger>,
+        the system SHALL …"; State-driven "WHILE <state>, …"; Conditional "IF
+        <condition>, THEN …"). Use SHALL/MUST (avoid should/may).
+      - Every requirement MUST have at least one `#### Scenario: <name>` with
+        WHEN/THEN steps — each scenario is a test case. Scenarios MUST use
+        exactly four hashtags.
+      - Capture non-functional targets (performance, availability, security) as
+        their own requirements linked to the architecture quality attributes, and
+        state explicit out-of-scope.
 
-      Each requirement must be independently verifiable; these feed the
-      acceptance-and-review requirements-to-code traceability table.
+      These specs are the source of truth: `openspec archive` merges them into
+      `openspec/specs/`, giving later `feature` changes a baseline to delta
+      against. They also feed the acceptance-and-review traceability table.
 
       **Gathering inputs:** this is a primary interview phase — gather broadly so
       later artifacts can mostly synthesize. Read the brief first, then ask one
@@ -144,7 +145,7 @@ artifacts:
       guess attached; stop at ~95% confidence. If they say "just draft it,"
       proceed on explicit, listed assumptions.
     requires:
-      - requirements
+      - specs
       - constitution
 
   - id: api-contract
@@ -351,7 +352,7 @@ artifacts:
       guess attached; stop at ~95% confidence. If they say "just draft it,"
       proceed on explicit, listed assumptions.
     requires:
-      - requirements
+      - specs
       - quality-strategy
 
   - id: tasks
