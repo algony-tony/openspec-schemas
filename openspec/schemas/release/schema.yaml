@@ -134,4 +134,8 @@ apply:
     - **Wide loop**: if the release surfaces a defect, open a `bugfix` change for
       the root cause; if it surfaces a missing capability, that is a `feature`.
 
+    Track progress by checking the existing `- [ ]` boxes in `tasks.md` in
+    place — keep exactly one task list; never rewrite, regenerate, or append
+    a second copy of it.
+
     Stop and ask the human on any blocker rather than guessing.

@@ -141,6 +141,19 @@ task and ends with explicit `## Verification` (full suite, lint, typecheck,
 build, observability/security smoke) and `## Review` (code review against the
 checklist + requirements traceability). `apply` runs these as gates.
 
+> **Dogfooding fix (2026-06-19).** A first real run produced an app that 404'd on
+> startup while every test box was checked, plus a `tasks.md` written twice. Root
+> causes + fixes folded back into the schema: (1) **a green test suite is not
+> proof the app works** — `Verification` now requires *running the app the way a
+> user does, opening its entry URL, and confirming a non-404 working page + one
+> core flow*, with real evidence; (2) **no coherent run/entry model** — the
+> `project-scaffold` `Run & Entry` section now requires one run command, the
+> single entry URL, and how FE/BE connect (an API-only backend whose root 404s is
+> not an entry); (3) `acceptance-and-review` now requires an **end-to-end,
+> user-facing** criterion; (4) `apply` must update `tasks.md` **in place** (one
+> task list, never a duplicated rewrite). These apply to `feature` too, and the
+> in-place rule to all schemas.
+
 **C — The feedback loop (two radii), explicit in the `apply` instruction:**
 
 - **Tight loop** — implementation defect / failing test / review nit: run

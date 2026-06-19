@@ -244,7 +244,9 @@ artifacts:
 
       Fill every template section:
       - **Acceptance Criteria (per requirement)**: restate each spec requirement's
-        testable criteria — the yardstick for conformance.
+        testable criteria — the yardstick for conformance. Include at least one
+        **end-to-end, user-facing** criterion ("a user opens <entry> and can
+        <core action>"), whose evidence is a real run — not a unit/API test.
       - **Definition of Done**: tests pass, telemetry added, docs updated,
         reviewed, traceability green.
       - **Code-Review Checklist**: correctness, boundaries respected, error
@@ -280,8 +282,10 @@ artifacts:
         and watch it fail -> write minimal code to pass -> run and confirm pass ->
         commit. Each task ends with an independently testable deliverable.
       - End with two explicit phases: `## Verification` (affected/full suite,
-        lint, typecheck, build, observability/security smoke) and `## Review`
-        (code review against acceptance-and-review + traceability green).
+        lint, typecheck, build; then RUN THE APP and confirm the feature's entry
+        URL/flow works end-to-end — not 404/blank; a green suite is not enough;
+        plus an observability/security smoke) and `## Review` (code review
+        against acceptance-and-review + traceability green).
 
       **Clarifying before drafting:** read the dependency artifacts and the
       codebase first and reuse their answers. Then list the *material* unknowns —
@@ -314,7 +318,9 @@ apply:
        only when its tests pass.
     2. Run the `## Verification` and `## Review` phases as gates. Never claim a
        task or the feature "done" without showing the green evidence — evidence
-       before assertions.
+       before assertions. A green test suite is not proof the feature works:
+       Verification must include actually running the app and confirming the
+       feature's entry URL/flow works end-to-end (not 404).
     3. Check conformance against acceptance-and-review: every requirement's
        acceptance criteria must have passing evidence in the traceability table.
 
@@ -330,5 +336,9 @@ apply:
     a browser automation tool (e.g. Playwright, chrome-devtools-mcp, or gstack
     `browse`). Prompt the human to install and run it, and proceed only after
     explicit consent — nothing is bundled.
+
+    Track progress by checking the existing `- [ ]` boxes in `tasks.md` in
+    place — keep exactly one task list; never rewrite, regenerate, or append
+    a second copy of it.
 
     Stop and ask the human on any blocker rather than guessing.

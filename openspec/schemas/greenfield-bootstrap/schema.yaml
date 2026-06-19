@@ -382,6 +382,11 @@ artifacts:
         not in code; how secrets are provided; per-environment config.
       - **CI/CD**: the pipeline stages and gates (build, test, lint/typecheck,
         security audit, deploy) — wire in the quality-strategy gates.
+      - **Run & Entry**: define ONE command to run the whole app and the single
+        entry URL a user opens, and resolve how frontend and backend connect
+        (backend serves the built SPA, a dev proxy, or two servers — name which
+        URL is the app). Do not leave an API-only backend whose root 404s as the
+        de-facto entry.
       - **IaC & Local Dev**: an infrastructure-as-code baseline and exact local
         setup commands (clone -> install -> run in as few steps as possible).
 
@@ -407,7 +412,9 @@ artifacts:
       Fill every template section:
       - **Acceptance Criteria (per requirement)**: restate each requirement's
         testable criteria — this is the yardstick for whether the code matches
-        the requirements.
+        the requirements. Include at least one **end-to-end, user-facing**
+        criterion ("a user opens <entry URL> and can <core action> through the
+        app"), whose evidence is a real run — not a unit/API test.
       - **Definition of Done**: the checklist that marks work complete (tests
         pass, telemetry added, docs updated, reviewed, traceability green).
       - **Code-Review Checklist**: what a reviewer must verify (correctness,
@@ -447,8 +454,12 @@ artifacts:
         and watch it fail -> write the minimal code to pass -> run and confirm
         pass -> commit. Each task ends with an independently testable deliverable.
       - End with two explicit phases, not just build:
-        - `## Verification`: run the full test suite, lint, typecheck, build, and
-          an observability/security smoke.
+        - `## Verification`: run the full test suite, lint, typecheck, build;
+          then RUN THE APP the way a user does (the project-scaffold run command),
+          open its entry URL, and confirm it serves a working page — not
+          404/blank — and that one core user flow works end-to-end; plus an
+          observability/security smoke. A green test suite is NOT sufficient:
+          the running app must actually serve its documented entry.
         - `## Review`: code review against the acceptance-and-review checklist,
           and confirm the requirements-to-code traceability table is green.
 
@@ -522,7 +533,9 @@ apply:
        done only when its tests pass.
     2. Run the `## Verification` and `## Review` phases as gates. Never claim a
        task or the build "done" without showing the green evidence (test output,
-       lint/typecheck/build results) — evidence before assertions.
+       lint/typecheck/build results) — evidence before assertions. A green test
+       suite is not proof the app works: the Verification phase must include
+       actually running the app and confirming its entry URL serves (not 404).
     3. Check conformance against acceptance-and-review: every requirement's
        acceptance criteria must have passing evidence in the traceability table.
 
@@ -539,6 +552,10 @@ apply:
     a browser automation tool (e.g. Playwright, chrome-devtools-mcp, or gstack
     `browse`). Prompt the human to install and run it, and proceed only after
     explicit consent — nothing is bundled.
+
+    Track progress by checking the existing `- [ ]` boxes in `tasks.md` in
+    place — keep exactly one task list; never rewrite, regenerate, or append
+    a second copy of it.
 
     Stop and ask the human on any blocker rather than guessing. Finish by
     confirming launch-readiness: do not declare launch-ready while any checklist

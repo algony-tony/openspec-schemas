@@ -149,4 +149,8 @@ apply:
       missing, stop and amend the spec as a follow-up change — don't patch
       around it.
 
+    Track progress by checking the existing `- [ ]` boxes in `tasks.md` in
+    place — keep exactly one task list; never rewrite, regenerate, or append
+    a second copy of it.
+
     Stop and ask the human on any blocker rather than guessing.
