@@ -25,7 +25,8 @@ schemas tuned to different **change shapes**.
 | `greenfield-bootstrap` | New full-stack project → verified, launch-ready MVP | ✅ Available |
 | `feature` | Add a capability to an existing system | ✅ Available |
 | `bugfix` | Reproduce → root cause → fix → regression | ✅ Available |
-| `refactor`, `release`, … | Various | Planned |
+| `refactor` | Change structure without changing behavior | ✅ Available |
+| `release` | Ship an existing system to production, safely & repeatedly | ✅ Available |
 
 ### `greenfield-bootstrap` at a glance
 
