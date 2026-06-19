@@ -1,0 +1,131 @@
+name: bugfix
+version: 1
+description: >
+  Fix a defect in an existing system, debugging-first: capture -> root cause ->
+  fix -> regression-guarded verification. Enforces "no fix without root cause".
+artifacts:
+  - id: report
+    generates: report.md
+    description: Symptom, reproduction, expected vs actual, evidence, environment, impact
+    template: report.md
+    instruction: |
+      Capture the bug precisely before anyone investigates. Preserve evidence —
+      do not start fixing.
+
+      Fill every template section:
+      - **Symptom**: the observed wrong behavior.
+      - **Reproduction**: exact steps to trigger it; note reliability (every time
+        vs intermittent). If you cannot reproduce it, gather more data — do not
+        guess.
+      - **Expected vs Actual**.
+      - **Evidence**: error output, stack traces, logs — verbatim. Read error
+        messages carefully; they often contain the answer.
+      - **Environment**: version/commit, OS, config, data conditions.
+      - **Impact / Severity**: who/what is affected, and how bad.
+
+      **Gathering inputs:** primary capture phase — get the exact symptom and
+      repro from the user and the system. Ask one question at a time with your
+      best guess attached; stop at ~95% confidence. If the user says "just draft
+      it," proceed on explicit, listed assumptions.
+    requires: []
+
+  - id: root-cause
+    generates: root-cause.md
+    description: Reliable reproduction, recent changes, hypotheses tested, confirmed root cause
+    template: root-cause.md
+    instruction: |
+      Find the ROOT CAUSE before any fix is proposed. The Iron Law of debugging:
+      NO FIXES WITHOUT ROOT-CAUSE INVESTIGATION FIRST. A symptom fix is a failure.
+
+      Fill every template section:
+      - **Reliable Reproduction**: the confirmed, ideally minimal, repro.
+      - **Recent Changes**: what changed that could cause this — commits, diffs,
+        new dependencies, config, environment differences.
+      - **Hypotheses Tested**: list hypotheses and test each ONE at a time;
+        record confirmed/ruled-out with evidence. In multi-component systems, add
+        diagnostic instrumentation at each boundary to find WHERE it breaks
+        before deciding WHY.
+      - **Root Cause**: the actual underlying cause, with evidence — not the
+        symptom. If there is no code root cause, say so (it may be a
+        spec/requirements gap → flag it for the fix's Spec Impact).
+
+      Do not advance to `fix` until the root cause is confirmed with evidence.
+
+      **Gathering inputs:** read the report and the relevant code/history first;
+      ask the user only for missing repro/environment facts, one at a time with
+      your best guess; stop at ~95%. If told "just draft it," proceed on explicit,
+      listed assumptions.
+    requires:
+      - report
+
+  - id: fix
+    generates: fix.md
+    description: Root-cause fix, regression test, blast radius, spec impact
+    template: fix.md
+    instruction: |
+      Plan the fix that addresses the confirmed root cause — never the symptom.
+
+      Fill every template section:
+      - **Fix**: the change that removes the root cause.
+      - **Regression Test**: the failing test to write first that reproduces the
+        bug and guards against recurrence.
+      - **Blast Radius**: what else this change can affect.
+      - **Spec Impact**: does the bug reveal a spec/requirements gap? If yes, this
+        is a spec change (the wide loop), not just a code patch — note the
+        follow-up change.
+
+      **Gathering inputs:** most inputs come from root-cause and the code — read
+      them first and reuse their answers; ask only about new decisions, one at a
+      time with your best guess; stop at ~95%. If told "just draft it," proceed on
+      explicit, listed assumptions.
+    requires:
+      - root-cause
+
+  - id: tasks
+    generates: tasks.md
+    description: Regression-test-first checklist (Guard -> Fix -> Verification)
+    template: tasks.md
+    instruction: |
+      Break the fix into a trackable checklist. Every actionable item MUST be a
+      `- [ ] X.Y` checkbox; apply parses these to track progress.
+
+      Required order (regression-test-first):
+      - `## 1. Guard`: write a failing regression test that reproduces the bug;
+        run it and confirm it fails for the right reason.
+      - `## 2. Fix`: implement the root-cause fix; run the regression test and
+        confirm it passes.
+      - `## 3. Verification`: confirm the originally reported symptom is gone
+        (use the report's repro steps); run the affected/full suite — no new
+        regressions.
+
+      **Gathering inputs:** inputs come from fix/root-cause/report — read them
+      first; ask only about new decisions, one at a time with your best guess;
+      stop at ~95%. If told "just draft it," proceed on explicit, listed
+      assumptions.
+    requires:
+      - fix
+
+apply:
+  requires:
+    - tasks
+  tracks: tasks.md
+  instruction: |
+    Implement the fix by working through tasks.md, then verify. This phase does
+    not end when the patch is written.
+
+    Loop:
+    1. Write the failing regression test first (it must fail for the right
+       reason), then implement the root-cause fix, then confirm the test passes.
+    2. Verify the originally reported symptom is gone using the report's repro
+       steps, and run the suite for regressions. Never claim "fixed" without the
+       green evidence — evidence before assertions.
+
+    When the fix does not work:
+    - **Tight loop**: return to `root-cause` and re-investigate with the new
+      information — do not pile on more guesses. If 3+ fix attempts have failed,
+      question the design/architecture rather than patching further.
+    - **Wide loop**: if the root cause is that a requirement/spec is wrong or
+      missing, stop and amend the spec as a follow-up change — don't patch
+      around it.
+
+    Stop and ask the human on any blocker rather than guessing.
