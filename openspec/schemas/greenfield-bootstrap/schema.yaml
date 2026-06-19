@@ -388,6 +388,8 @@ artifacts:
       - api-contract
       - data-model
       - quality-strategy
+      - observability
+      - security-baseline
       - acceptance-and-review
       - project-scaffold
 

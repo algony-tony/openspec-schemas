@@ -9,5 +9,5 @@
 - [ ] N.3 Observability & security smoke
 
 ## N+1. Review
-- [ ] [Code review against the acceptance-and-review checklist]
-- [ ] [Requirements ↔ code traceability check]
+- [ ] N+1.1 [Code review against the acceptance-and-review checklist]
+- [ ] N+1.2 [Requirements ↔ code traceability check]
