@@ -376,6 +376,8 @@ artifacts:
       Fill every template section:
       - **Repo Layout**: the directory structure and what each part is
         responsible for (split by responsibility, not by technical layer).
+        Include a `docs/` tree for durable project knowledge (architecture,
+        ADRs, observability, security) that outlives any single change.
       - **Tooling**: linter, formatter, type checker, package manager, and the
         exact commands.
       - **Config & Environments (12-factor)**: configuration in the environment,
@@ -450,9 +452,24 @@ artifacts:
       Structure:
       - Group build work under `## N. <Phase>` headings, ordered by dependency
         (what must exist first). Independent tasks can run in parallel "waves".
-      - Expand each build task into TDD steps: write the failing test -> run it
-        and watch it fail -> write the minimal code to pass -> run and confirm
-        pass -> commit. Each task ends with an independently testable deliverable.
+      - Granularity: one checkbox per STEP (~2-5 minutes), NOT one per file. Each
+        unit of behavior expands to its own steps — write the failing test, run
+        it and watch it fail, write the minimal code to pass, run and confirm
+        pass, commit (superpowers writing-plans granularity). "Create file X with
+        A, B, C" is too coarse: split it. A real full-stack MVP is dozens of
+        steps, not a dozen.
+      - Coverage: every PLAN artifact must be realized as concrete build tasks —
+        api-contract (each endpoint), data-model (each entity/migration),
+        quality-strategy (each test level), observability (each signal, health,
+        SLO), security-baseline (each control + abuse-case test), ux (each
+        screen/flow). A concern with a planning doc but no build task is a gap;
+        trace each artifact to its tasks.
+      - Durability: include tasks to persist the foundational knowledge as living
+        repo docs under `docs/` (architecture + key ADRs, observability strategy,
+        security baseline) and commit them. When the change is archived only the
+        delta specs merge into `openspec/specs/`; everything else is moved to
+        `changes/archive/`, so the repo `docs/` (plus the merged specs and the
+        constitution synced to config) are what keep this knowledge alive.
       - End with two explicit phases, not just build:
         - `## Verification`: run the full test suite, lint, typecheck, build;
           then RUN THE APP the way a user does (the project-scaffold run command),

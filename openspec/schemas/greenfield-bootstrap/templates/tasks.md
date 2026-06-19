@@ -1,7 +1,17 @@
 # Tasks: [Project Name]
 
-## 1. [Phase]
-- [ ] 1.1 [Build task — TDD: failing test → run (fail) → minimal impl → run (pass) → commit]
+## 1. [Phase — e.g. Data model]
+- [ ] 1.1 Write the failing test for [one unit of behavior]
+- [ ] 1.2 Run it — confirm it fails for the right reason
+- [ ] 1.3 Write the minimal code to pass
+- [ ] 1.4 Run the test — confirm it passes
+- [ ] 1.5 Commit
+
+[One checkbox per STEP (~2-5 min), NOT one per file. Repeat 1.1–1.5 per unit of
+behavior. Every PLAN artifact must appear here as concrete build tasks —
+api-contract, data-model, quality-strategy (each test level), observability
+(each signal/health/SLO), security-baseline (each control/abuse-case test), ux;
+a concern that has a plan but no build task is a gap.]
 
 ## N. Verification
 - [ ] N.1 Run full test suite — expect pass

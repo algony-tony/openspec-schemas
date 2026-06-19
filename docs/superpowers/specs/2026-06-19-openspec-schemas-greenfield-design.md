@@ -154,6 +154,21 @@ checklist + requirements traceability). `apply` runs these as gates.
 > task list, never a duplicated rewrite). These apply to `feature` too, and the
 > in-place rule to all schemas.
 
+> **Dogfooding fix, round 2 (2026-06-20).** The same run also exposed deeper
+> gaps that the 404 fix alone didn't address: (A) **task granularity** — the
+> template collapsed a whole TDD cycle into one checkbox, so a full-stack MVP
+> became ~13 coarse "create file X" items; `tasks` now mandates one checkbox per
+> *step* (~2-5 min, superpowers writing-plans granularity). (B) **concern
+> coverage** — the rich `observability`/`security-baseline`/`quality-strategy`
+> plans were barely realized in the build; `tasks` now requires every PLAN
+> artifact to map to concrete build tasks (a plan with no task is a gap). (C)
+> **archive buries knowledge** — `openspec archive` merges only the delta specs
+> into `openspec/specs/`; architecture/observability/security/ADRs move to
+> `changes/archive/`. So the schema now persists that foundational knowledge as
+> living `docs/` (defined in `project-scaffold`), making the repo `docs/` + merged
+> specs + constitution-in-config the durable record, with change artifacts as the
+> planning trail.
+
 **C — The feedback loop (two radii), explicit in the `apply` instruction:**
 
 - **Tight loop** — implementation defect / failing test / review nit: run

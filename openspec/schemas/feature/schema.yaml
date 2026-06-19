@@ -278,9 +278,12 @@ artifacts:
 
       Structure:
       - Group build work under `## N. <Phase>` headings, ordered by dependency.
-      - Expand each build task into TDD steps: write the failing test -> run it
-        and watch it fail -> write minimal code to pass -> run and confirm pass ->
-        commit. Each task ends with an independently testable deliverable.
+      - Granularity: one checkbox per STEP (~2-5 minutes), NOT one per file —
+        write the failing test, run it (fail), minimal code to pass, run (pass),
+        commit (superpowers writing-plans granularity). Split anything coarser.
+      - Coverage: every concern delta must be realized as concrete build tasks —
+        api-contract, data-model, observability (signals), security-baseline
+        (controls), ux. A delta with a plan but no build task is a gap.
       - End with two explicit phases: `## Verification` (affected/full suite,
         lint, typecheck, build; then RUN THE APP and confirm the feature's entry
         URL/flow works end-to-end — not 404/blank; a green suite is not enough;
