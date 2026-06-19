@@ -4,9 +4,12 @@ A reusable, MIT-licensed library of custom [OpenSpec](https://github.com/Fission
 workflow schemas covering full-stack software development — plus auxiliary
 workflows. Schemas are technology-stack agnostic.
 
-> **Status:** early development. Flagship schema `greenfield-bootstrap` is in
-> design. See the design doc:
-> [`docs/superpowers/specs/2026-06-19-openspec-schemas-greenfield-design.md`](docs/superpowers/specs/2026-06-19-openspec-schemas-greenfield-design.md).
+> **Status:** the flagship schema `greenfield-bootstrap` is **available** at
+> `openspec/schemas/greenfield-bootstrap/` (`openspec schema validate` passes).
+> See the design doc:
+> [`docs/superpowers/specs/2026-06-19-openspec-schemas-greenfield-design.md`](docs/superpowers/specs/2026-06-19-openspec-schemas-greenfield-design.md)
+> and the implementation plan:
+> [`docs/superpowers/plans/2026-06-19-greenfield-bootstrap-schema.md`](docs/superpowers/plans/2026-06-19-greenfield-bootstrap-schema.md).
 
 ## What is a schema?
 
@@ -19,7 +22,7 @@ schemas tuned to different **change shapes**.
 
 | Schema | Shape | Status |
 |---|---|---|
-| `greenfield-bootstrap` | New full-stack project → verified, launch-ready MVP | In design |
+| `greenfield-bootstrap` | New full-stack project → verified, launch-ready MVP | ✅ Available |
 | `feature` | Add a capability to an existing system | Planned |
 | `bugfix` | Reproduce → root cause → fix → regression | Planned |
 | `refactor`, `release`, … | Various | Planned |
