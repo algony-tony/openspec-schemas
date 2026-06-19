@@ -22,10 +22,15 @@ artifacts:
         folders) and code areas this touches — this drives the spec deltas.
       - **Impact**: users, APIs, data, dependencies, operational impact.
 
-      **Gathering inputs:** this is a primary interview phase for the feature —
-      gather what is wanted and read the existing system. Ask one question at a
-      time with your best guess attached; stop at ~95% confidence. If the user
-      says "just draft it," proceed on explicit, listed assumptions.
+      **Clarifying before drafting (primary interview):** this artifact gathers
+      broadly, so material unknowns are likely. List the unknowns that would
+      change this artifact or a downstream decision; resolve what you can from any
+      dependencies and the codebase. For the rest, ASK the user before writing the
+      file — brainstorming-style: one question at a time, multiple-choice when you
+      can, each with your recommended default. Skip trivial unknowns (use a
+      sensible default). Record an item as deferred only if the user explicitly
+      chose to defer it — never as a substitute for asking. If the user says "just
+      draft it," proceed on explicit, listed assumptions.
     requires: []
 
   - id: specs
@@ -50,10 +55,15 @@ artifacts:
       - Every requirement has at least one `#### Scenario:` with WHEN/THEN — each
         scenario is a test case. Scenarios MUST use exactly four hashtags.
 
-      **Gathering inputs:** primary interview for the feature's behavior. Read the
-      existing specs first; ask only about behavior not already settled, one
-      question at a time with your best guess; stop at ~95%. If told "just draft
-      it," proceed on explicit, listed assumptions.
+      **Clarifying before drafting (primary interview):** this artifact gathers
+      broadly, so material unknowns are likely. List the unknowns that would
+      change this artifact or a downstream decision; resolve what you can from any
+      dependencies and the codebase. For the rest, ASK the user before writing the
+      file — brainstorming-style: one question at a time, multiple-choice when you
+      can, each with your recommended default. Skip trivial unknowns (use a
+      sensible default). Record an item as deferred only if the user explicitly
+      chose to defer it — never as a substitute for asking. If the user says "just
+      draft it," proceed on explicit, listed assumptions.
     requires:
       - proposal
 
@@ -74,11 +84,14 @@ artifacts:
       - **Rollout**: feature flag, migration ordering, gradual rollout, and
         backward compatibility.
 
-      **Gathering inputs:** most inputs come from the proposal/specs and the
-      existing system — read them first and reuse their answers; don't re-ask.
-      Ask the user only about decisions this feature newly introduces, one at a
-      time with your best guess; stop at ~95%. If told "just draft it," proceed
-      on explicit, listed assumptions.
+      **Clarifying before drafting:** read the dependency artifacts and the
+      codebase first and reuse their answers. Then list the *material* unknowns —
+      those that would change this artifact or a downstream decision. If any
+      remain, ASK the user before writing the file — brainstorming-style: one
+      question at a time, multiple-choice when you can, each with your recommended
+      default. Skip trivial unknowns (use a sensible default); record an item as
+      deferred only if the user explicitly chose to defer it. If the user says
+      "just draft it," proceed on explicit, listed assumptions.
     requires:
       - proposal
       - specs
@@ -99,10 +112,14 @@ artifacts:
       - **Versioning & Compatibility**: keep existing consumers working (Hyrum's
         Law); prefer extending over breaking; define deprecation if needed.
 
-      **Gathering inputs:** most inputs come from the dependency artifacts and the
-      existing API — read them first; ask only about new decisions, one at a time
-      with your best guess; stop at ~95%. If told "just draft it," proceed on
-      explicit, listed assumptions.
+      **Clarifying before drafting:** read the dependency artifacts and the
+      codebase first and reuse their answers. Then list the *material* unknowns —
+      those that would change this artifact or a downstream decision. If any
+      remain, ASK the user before writing the file — brainstorming-style: one
+      question at a time, multiple-choice when you can, each with your recommended
+      default. Skip trivial unknowns (use a sensible default); record an item as
+      deferred only if the user explicitly chose to defer it. If the user says
+      "just draft it," proceed on explicit, listed assumptions.
     requires:
       - design
 
@@ -121,10 +138,14 @@ artifacts:
       - **Lifecycle & Retention**: classification/retention for new data;
         coordinate sensitive data with security-baseline.
 
-      **Gathering inputs:** most inputs come from the dependency artifacts and the
-      existing schema — read them first; ask only about new decisions, one at a
-      time with your best guess; stop at ~95%. If told "just draft it," proceed
-      on explicit, listed assumptions.
+      **Clarifying before drafting:** read the dependency artifacts and the
+      codebase first and reuse their answers. Then list the *material* unknowns —
+      those that would change this artifact or a downstream decision. If any
+      remain, ASK the user before writing the file — brainstorming-style: one
+      question at a time, multiple-choice when you can, each with your recommended
+      default. Skip trivial unknowns (use a sensible default); record an item as
+      deferred only if the user explicitly chose to defer it. If the user says
+      "just draft it," proceed on explicit, listed assumptions.
     requires:
       - design
 
@@ -143,10 +164,14 @@ artifacts:
         logs: stable event name + fields).
       - **Alerts / SLO Impact**: new or changed alerts/SLOs.
 
-      **Gathering inputs:** most inputs come from the dependency artifacts and the
-      existing observability baseline — read them first; ask only about new
-      decisions, one at a time with your best guess; stop at ~95%. If told "just
-      draft it," proceed on explicit, listed assumptions.
+      **Clarifying before drafting:** read the dependency artifacts and the
+      codebase first and reuse their answers. Then list the *material* unknowns —
+      those that would change this artifact or a downstream decision. If any
+      remain, ASK the user before writing the file — brainstorming-style: one
+      question at a time, multiple-choice when you can, each with your recommended
+      default. Skip trivial unknowns (use a sensible default); record an item as
+      deferred only if the user explicitly chose to defer it. If the user says
+      "just draft it," proceed on explicit, listed assumptions.
     requires:
       - design
 
@@ -165,10 +190,14 @@ artifacts:
         (OWASP always-do controls still apply).
       - **Abuse Cases**: how it could be misused → make those the first tests.
 
-      **Gathering inputs:** most inputs come from the dependency artifacts and the
-      project security baseline — read them first; ask only about new decisions,
-      one at a time with your best guess; stop at ~95%. If told "just draft it,"
-      proceed on explicit, listed assumptions.
+      **Clarifying before drafting:** read the dependency artifacts and the
+      codebase first and reuse their answers. Then list the *material* unknowns —
+      those that would change this artifact or a downstream decision. If any
+      remain, ASK the user before writing the file — brainstorming-style: one
+      question at a time, multiple-choice when you can, each with your recommended
+      default. Skip trivial unknowns (use a sensible default); record an item as
+      deferred only if the user explicitly chose to defer it. If the user says
+      "just draft it," proceed on explicit, listed assumptions.
     requires:
       - design
 
@@ -195,11 +224,14 @@ artifacts:
 
       Stay framework-agnostic. Follow the existing design system/conventions.
 
-      **Gathering inputs:** most inputs come from the dependency artifacts and any
-      provided prototype — read them first; ask the user only whether a prototype
-      exists and for decisions it doesn't settle, one at a time with your best
-      guess; stop at ~95%. If told "just draft it," proceed on explicit, listed
-      assumptions.
+      **Clarifying before drafting:** read the dependency artifacts and the
+      codebase first and reuse their answers. Then list the *material* unknowns —
+      those that would change this artifact or a downstream decision. If any
+      remain, ASK the user before writing the file — brainstorming-style: one
+      question at a time, multiple-choice when you can, each with your recommended
+      default. Skip trivial unknowns (use a sensible default); record an item as
+      deferred only if the user explicitly chose to defer it. If the user says
+      "just draft it," proceed on explicit, listed assumptions.
     requires:
       - design
 
@@ -223,9 +255,14 @@ artifacts:
       During apply, drift in this table triggers the wide feedback loop: stop and
       amend the spec delta as a follow-up change.
 
-      **Gathering inputs:** most inputs come from the spec delta — read it first;
-      ask only about new decisions, one at a time with your best guess; stop at
-      ~95%. If told "just draft it," proceed on explicit, listed assumptions.
+      **Clarifying before drafting:** read the dependency artifacts and the
+      codebase first and reuse their answers. Then list the *material* unknowns —
+      those that would change this artifact or a downstream decision. If any
+      remain, ASK the user before writing the file — brainstorming-style: one
+      question at a time, multiple-choice when you can, each with your recommended
+      default. Skip trivial unknowns (use a sensible default); record an item as
+      deferred only if the user explicitly chose to defer it. If the user says
+      "just draft it," proceed on explicit, listed assumptions.
     requires:
       - specs
 
@@ -246,10 +283,14 @@ artifacts:
         lint, typecheck, build, observability/security smoke) and `## Review`
         (code review against acceptance-and-review + traceability green).
 
-      **Gathering inputs:** most inputs come from the dependency artifacts — read
-      them first; ask only about new decisions, one at a time with your best
-      guess; stop at ~95%. If told "just draft it," proceed on explicit, listed
-      assumptions.
+      **Clarifying before drafting:** read the dependency artifacts and the
+      codebase first and reuse their answers. Then list the *material* unknowns —
+      those that would change this artifact or a downstream decision. If any
+      remain, ASK the user before writing the file — brainstorming-style: one
+      question at a time, multiple-choice when you can, each with your recommended
+      default. Skip trivial unknowns (use a sensible default); record an item as
+      deferred only if the user explicitly chose to defer it. If the user says
+      "just draft it," proceed on explicit, listed assumptions.
     requires:
       - design
       - api-contract

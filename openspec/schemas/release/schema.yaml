@@ -18,10 +18,15 @@ artifacts:
       - **Changelog**: user-facing entries.
       - **Audience & Risk**: who receives it and the risk level.
 
-      **Gathering inputs:** primary phase — gather what ships from the user and
-      the change history. Ask one question at a time with your best guess
-      attached; stop at ~95% confidence. If the user says "just draft it,"
-      proceed on explicit, listed assumptions.
+      **Clarifying before drafting (primary interview):** this artifact gathers
+      broadly, so material unknowns are likely. List the unknowns that would
+      change this artifact or a downstream decision; resolve what you can from any
+      dependencies and the codebase. For the rest, ASK the user before writing the
+      file — brainstorming-style: one question at a time, multiple-choice when you
+      can, each with your recommended default. Skip trivial unknowns (use a
+      sensible default). Record an item as deferred only if the user explicitly
+      chose to defer it — never as a substitute for asking. If the user says "just
+      draft it," proceed on explicit, listed assumptions.
     requires: []
 
   - id: release-plan
@@ -41,10 +46,14 @@ artifacts:
         rollback.
       - **Comms**: who to notify, when, and the announcement.
 
-      **Gathering inputs:** most inputs come from scope and the system — read
-      them first and reuse their answers; ask only about new decisions, one at a
-      time with your best guess; stop at ~95%. If told "just draft it," proceed
-      on explicit, listed assumptions.
+      **Clarifying before drafting:** read the dependency artifacts and the
+      codebase first and reuse their answers. Then list the *material* unknowns —
+      those that would change this artifact or a downstream decision. If any
+      remain, ASK the user before writing the file — brainstorming-style: one
+      question at a time, multiple-choice when you can, each with your recommended
+      default. Skip trivial unknowns (use a sensible default); record an item as
+      deferred only if the user explicitly chose to defer it. If the user says
+      "just draft it," proceed on explicit, listed assumptions.
     requires:
       - scope
 
@@ -64,9 +73,14 @@ artifacts:
 
       Mark each gate only with evidence — a failed gate is a no-go.
 
-      **Gathering inputs:** most inputs come from release-plan and CI/system
-      state — check them directly rather than asking; ask the user only for
-      sign-off. If told "just draft it," proceed on explicit, listed assumptions.
+      **Clarifying before drafting:** read the dependency artifacts and the
+      codebase first and reuse their answers. Then list the *material* unknowns —
+      those that would change this artifact or a downstream decision. If any
+      remain, ASK the user before writing the file — brainstorming-style: one
+      question at a time, multiple-choice when you can, each with your recommended
+      default. Skip trivial unknowns (use a sensible default); record an item as
+      deferred only if the user explicitly chose to defer it. If the user says
+      "just draft it," proceed on explicit, listed assumptions.
     requires:
       - release-plan
 
@@ -88,9 +102,14 @@ artifacts:
         incidents, and action items (defects → a `bugfix` change; gaps → a
         `feature`).
 
-      **Gathering inputs:** inputs come from preflight/release-plan — read them
-      first; ask only about new decisions. If told "just draft it," proceed on
-      explicit, listed assumptions.
+      **Clarifying before drafting:** read the dependency artifacts and the
+      codebase first and reuse their answers. Then list the *material* unknowns —
+      those that would change this artifact or a downstream decision. If any
+      remain, ASK the user before writing the file — brainstorming-style: one
+      question at a time, multiple-choice when you can, each with your recommended
+      default. Skip trivial unknowns (use a sensible default); record an item as
+      deferred only if the user explicitly chose to defer it. If the user says
+      "just draft it," proceed on explicit, listed assumptions.
     requires:
       - preflight
 

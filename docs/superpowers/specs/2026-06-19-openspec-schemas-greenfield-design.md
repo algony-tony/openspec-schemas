@@ -225,21 +225,27 @@ context is unclear" guardrail; each artifact reads its completed dependencies
 first, so it only asks about what is genuinely new.
 
 To keep this coherent rather than 13 disjoint interrogations, every artifact
-instruction carries a **Gathering inputs** protocol (progressive interviewing):
+instruction carries a **Clarifying before drafting** protocol:
 
-- **DEFINE artifacts** (`product-brief`, `constitution`, `specs`) are the
-  **primary interview** — gather broadly so later artifacts can mostly
-  synthesize.
-- **PLAN/VERIFY/SHIP artifacts** lean on dependencies — read them first, reuse
-  their answers, and ask the user only about decisions the artifact newly
-  introduces.
-- All artifacts: ask **one question at a time with your best guess attached**,
-  stop at **~95% confidence**; if the user says "just draft it," proceed on
-  explicit, listed assumptions.
+- **Material-unknown gate**: before writing the file, the agent lists the
+  unknowns that would change this artifact or a downstream decision, resolves
+  what it can from dependencies and the codebase, and **asks the user about the
+  rest** — *only* material ones; trivial unknowns get a sensible default.
+- **Brainstorming-style asking** (per `superpowers:brainstorming`): one question
+  at a time, multiple-choice when possible, each with the agent's recommended
+  default.
+- **No parking**: an `Open Questions`/deferred entry is only for items the user
+  explicitly chose to defer — never a substitute for asking. (This is the fix
+  for the failure mode where `opsx:continue`, being a draft-and-stop operation,
+  let the agent dump questions into the doc instead of asking.)
+- **DEFINE/primary artifacts** (`product-brief`, `constitution`, `specs`;
+  feature's `proposal`/`specs`; etc.) gather broadly; **downstream artifacts**
+  lean on dependencies and ask only about newly-introduced decisions.
 
-Cadence is the user's choice: `opsx:continue` (one artifact per step, more
-interactive) vs `opsx:ff` (draft all, fewer questions). Future schemas should
-reuse this protocol.
+A schema only supplies instructions, so this strongly biases the agent to ask
+but cannot add a hard CLI gate. Cadence is the user's choice: `opsx:continue`
+(per artifact) vs `opsx:ff` (draft all, fewer questions); `opsx:explore` is the
+fully-interactive upstream option. Future schemas reuse this protocol.
 
 ## 12. Open questions
 

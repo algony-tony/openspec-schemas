@@ -16,4 +16,5 @@
 [Measurable signals that the MVP works.]
 
 ## Open Questions
-[Unknowns needing human input.]
+[Only items you and the user explicitly chose to defer — not a place to park
+questions you should have asked before drafting.]

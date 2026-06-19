@@ -23,9 +23,15 @@ artifacts:
       - **Impact**: files/modules touched. The public API should NOT change — if
         it must, this is a feature, not a refactor; stop and split it out.
 
-      **Gathering inputs:** primary phase — understand the code first. Ask one
-      question at a time with your best guess attached; stop at ~95% confidence.
-      If the user says "just draft it," proceed on explicit, listed assumptions.
+      **Clarifying before drafting (primary interview):** this artifact gathers
+      broadly, so material unknowns are likely. List the unknowns that would
+      change this artifact or a downstream decision; resolve what you can from any
+      dependencies and the codebase. For the rest, ASK the user before writing the
+      file — brainstorming-style: one question at a time, multiple-choice when you
+      can, each with your recommended default. Skip trivial unknowns (use a
+      sensible default). Record an item as deferred only if the user explicitly
+      chose to defer it — never as a substitute for asking. If the user says "just
+      draft it," proceed on explicit, listed assumptions.
     requires: []
 
   - id: safety-net
@@ -45,9 +51,14 @@ artifacts:
       - **Green Baseline**: the command to run them; confirm all green before
         starting.
 
-      **Gathering inputs:** read the proposal and the code under refactor; ask
-      only for missing facts, one at a time with your best guess; stop at ~95%.
-      If told "just draft it," proceed on explicit, listed assumptions.
+      **Clarifying before drafting:** read the dependency artifacts and the
+      codebase first and reuse their answers. Then list the *material* unknowns —
+      those that would change this artifact or a downstream decision. If any
+      remain, ASK the user before writing the file — brainstorming-style: one
+      question at a time, multiple-choice when you can, each with your recommended
+      default. Skip trivial unknowns (use a sensible default); record an item as
+      deferred only if the user explicitly chose to defer it. If the user says
+      "just draft it," proceed on explicit, listed assumptions.
     requires:
       - proposal
 
@@ -70,10 +81,14 @@ artifacts:
       - **Incremental Sequence**: ordered small steps, each of which keeps the
         safety-net tests green.
 
-      **Gathering inputs:** most inputs come from proposal/safety-net and the
-      code — read them first and reuse their answers; ask only about new
-      decisions, one at a time with your best guess; stop at ~95%. If told "just
-      draft it," proceed on explicit, listed assumptions.
+      **Clarifying before drafting:** read the dependency artifacts and the
+      codebase first and reuse their answers. Then list the *material* unknowns —
+      those that would change this artifact or a downstream decision. If any
+      remain, ASK the user before writing the file — brainstorming-style: one
+      question at a time, multiple-choice when you can, each with your recommended
+      default. Skip trivial unknowns (use a sensible default); record an item as
+      deferred only if the user explicitly chose to defer it. If the user says
+      "just draft it," proceed on explicit, listed assumptions.
     requires:
       - proposal
       - safety-net
@@ -94,9 +109,14 @@ artifacts:
       - End with `## Verification`: full safety-net + affected suite green (no
         test changes), no public API/behavior change, lint/typecheck/build pass.
 
-      **Gathering inputs:** inputs come from target/safety-net — read them first;
-      ask only about new decisions, one at a time with your best guess; stop at
-      ~95%. If told "just draft it," proceed on explicit, listed assumptions.
+      **Clarifying before drafting:** read the dependency artifacts and the
+      codebase first and reuse their answers. Then list the *material* unknowns —
+      those that would change this artifact or a downstream decision. If any
+      remain, ASK the user before writing the file — brainstorming-style: one
+      question at a time, multiple-choice when you can, each with your recommended
+      default. Skip trivial unknowns (use a sensible default); record an item as
+      deferred only if the user explicitly chose to defer it. If the user says
+      "just draft it," proceed on explicit, listed assumptions.
     requires:
       - target
       - safety-net
