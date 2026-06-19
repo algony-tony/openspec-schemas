@@ -31,6 +31,11 @@ artifacts:
 
       Keep it to one page. This brief anchors every later artifact; if scope or
       users are unclear, stop and ask rather than guess.
+
+      **Gathering inputs:** this is a primary interview phase — gather broadly so
+      later artifacts can mostly synthesize. Ask one question at a time with your
+      best guess attached; stop at ~95% confidence. If the user says "just draft
+      it," proceed on explicit, listed assumptions.
     requires: []
 
   - id: constitution
@@ -67,6 +72,11 @@ artifacts:
         - Principles: <one line each>
         - Always: ... | Ask first: ... | Never: ...
       ```
+
+      **Gathering inputs:** this is a primary interview phase — gather broadly so
+      later artifacts can mostly synthesize. Ask one question at a time with your
+      best guess attached; stop at ~95% confidence. If the user says "just draft
+      it," proceed on explicit, listed assumptions.
     requires:
       - product-brief
 
@@ -95,6 +105,11 @@ artifacts:
 
       Each requirement must be independently verifiable; these feed the
       acceptance-and-review requirements-to-code traceability table.
+
+      **Gathering inputs:** this is a primary interview phase — gather broadly so
+      later artifacts can mostly synthesize. Read the brief first, then ask one
+      question at a time with your best guess attached; stop at ~95% confidence.
+      If the user says "just draft it," proceed on explicit, listed assumptions.
     requires:
       - product-brief
       - constitution
@@ -122,6 +137,12 @@ artifacts:
 
       Focus on structure and rationale, not line-by-line implementation. Respect
       the constitution's principles and tech stack.
+
+      **Gathering inputs:** most inputs come from the dependency artifacts — read
+      them first and reuse their answers; don't re-ask. Ask the user only about
+      decisions this artifact newly introduces, one at a time with your best
+      guess attached; stop at ~95% confidence. If they say "just draft it,"
+      proceed on explicit, listed assumptions.
     requires:
       - requirements
       - constitution
@@ -146,6 +167,12 @@ artifacts:
       Apply Hyrum's Law: every observable behavior becomes a de facto contract,
       so minimize what you expose and don't leak implementation details. Prefer
       extending over forking (one version at a time).
+
+      **Gathering inputs:** most inputs come from the dependency artifacts — read
+      them first and reuse their answers; don't re-ask. Ask the user only about
+      decisions this artifact newly introduces, one at a time with your best
+      guess attached; stop at ~95% confidence. If they say "just draft it,"
+      proceed on explicit, listed assumptions.
     requires:
       - architecture
 
@@ -166,6 +193,12 @@ artifacts:
         deletion — coordinate sensitive-data handling with security-baseline.
 
       The data model informs the API shape; keep the two consistent.
+
+      **Gathering inputs:** most inputs come from the dependency artifacts — read
+      them first and reuse their answers; don't re-ask. Ask the user only about
+      decisions this artifact newly introduces, one at a time with your best
+      guess attached; stop at ~95% confidence. If they say "just draft it,"
+      proceed on explicit, listed assumptions.
     requires:
       - architecture
 
@@ -191,6 +224,12 @@ artifacts:
         run at which CI stage.
 
       This sets the bar that acceptance-and-review and tasks enforce.
+
+      **Gathering inputs:** most inputs come from the dependency artifacts — read
+      them first and reuse their answers; don't re-ask. Ask the user only about
+      decisions this artifact newly introduces, one at a time with your best
+      guess attached; stop at ~95% confidence. If they say "just draft it,"
+      proceed on explicit, listed assumptions.
     requires:
       - architecture
 
@@ -213,6 +252,12 @@ artifacts:
       - **Health & Readiness**: health/readiness endpoints and dependency checks.
       - **SLOs & Alerts**: SLOs, error budgets, and alert rules tied back to the
         on-call questions.
+
+      **Gathering inputs:** most inputs come from the dependency artifacts — read
+      them first and reuse their answers; don't re-ask. Ask the user only about
+      decisions this artifact newly introduces, one at a time with your best
+      guess attached; stop at ~95% confidence. If they say "just draft it,"
+      proceed on explicit, listed assumptions.
     requires:
       - architecture
 
@@ -241,6 +286,12 @@ artifacts:
       - **Data Classification**: how PII/secrets are stored and handled.
 
       Most breaches begin in design (OWASP A04: Insecure Design), not in code.
+
+      **Gathering inputs:** most inputs come from the dependency artifacts — read
+      them first and reuse their answers; don't re-ask. Ask the user only about
+      decisions this artifact newly introduces, one at a time with your best
+      guess attached; stop at ~95% confidence. If they say "just draft it,"
+      proceed on explicit, listed assumptions.
     requires:
       - architecture
 
@@ -262,6 +313,12 @@ artifacts:
         security audit, deploy) — wire in the quality-strategy gates.
       - **IaC & Local Dev**: an infrastructure-as-code baseline and exact local
         setup commands (clone -> install -> run in as few steps as possible).
+
+      **Gathering inputs:** most inputs come from the dependency artifacts — read
+      them first and reuse their answers; don't re-ask. Ask the user only about
+      decisions this artifact newly introduces, one at a time with your best
+      guess attached; stop at ~95% confidence. If they say "just draft it,"
+      proceed on explicit, listed assumptions.
     requires:
       - architecture
 
@@ -287,6 +344,12 @@ artifacts:
       During apply, drift in this table (a requirement with no passing evidence,
       or behavior that contradicts a requirement) triggers the wide feedback
       loop: stop and amend requirements as a follow-up change.
+
+      **Gathering inputs:** most inputs come from the dependency artifacts — read
+      them first and reuse their answers; don't re-ask. Ask the user only about
+      decisions this artifact newly introduces, one at a time with your best
+      guess attached; stop at ~95% confidence. If they say "just draft it,"
+      proceed on explicit, listed assumptions.
     requires:
       - requirements
       - quality-strategy
@@ -314,6 +377,12 @@ artifacts:
 
       Reference the specs for what to build and architecture/api/data for how.
       Each task must be verifiable — you know when it is done.
+
+      **Gathering inputs:** most inputs come from the dependency artifacts — read
+      them first and reuse their answers; don't re-ask. Ask the user only about
+      decisions this artifact newly introduces, one at a time with your best
+      guess attached; stop at ~95% confidence. If they say "just draft it,"
+      proceed on explicit, listed assumptions.
     requires:
       - architecture
       - api-contract
@@ -340,6 +409,12 @@ artifacts:
 
       Do not mark launch-ready while any checklist item is unmet — evidence
       before the claim.
+
+      **Gathering inputs:** most inputs come from the dependency artifacts — read
+      them first and reuse their answers; don't re-ask. Ask the user only about
+      decisions this artifact newly introduces, one at a time with your best
+      guess attached; stop at ~95% confidence. If they say "just draft it,"
+      proceed on explicit, listed assumptions.
     requires:
       - observability
       - security-baseline

@@ -213,7 +213,34 @@ the copyright + permission notice must travel with the copied text.
 - Repeated production deploys/releases — that is a future `release` schema;
   `greenfield-bootstrap` stops at `launch-readiness`.
 
-## 11. Open questions
+## 11. Information gathering & progressive interviewing
+
+How does a 13-artifact schema collect information and question the user? **Not
+via `explore`** — that is an optional, open-ended upstream "thinking stance"
+that deliberately has no fixed steps and does not cover the artifact set.
+Questioning happens **per artifact during creation** (`opsx:continue`/`ff`),
+driven by each artifact's `instruction` plus the command's "ask the user if
+context is unclear" guardrail; each artifact reads its completed dependencies
+first, so it only asks about what is genuinely new.
+
+To keep this coherent rather than 13 disjoint interrogations, every artifact
+instruction carries a **Gathering inputs** protocol (progressive interviewing):
+
+- **DEFINE artifacts** (`product-brief`, `constitution`, `requirements`) are the
+  **primary interview** — gather broadly so later artifacts can mostly
+  synthesize.
+- **PLAN/VERIFY/SHIP artifacts** lean on dependencies — read them first, reuse
+  their answers, and ask the user only about decisions the artifact newly
+  introduces.
+- All artifacts: ask **one question at a time with your best guess attached**,
+  stop at **~95% confidence**; if the user says "just draft it," proceed on
+  explicit, listed assumptions.
+
+Cadence is the user's choice: `opsx:continue` (one artifact per step, more
+interactive) vs `opsx:ff` (draft all, fewer questions). Future schemas should
+reuse this protocol.
+
+## 12. Open questions
 
 - Exact `requires` DAG and which PLAN artifacts `tasks` formally depends on
   (finalized in `schema.yaml`).
