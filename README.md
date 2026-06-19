@@ -18,7 +18,7 @@ artifacts (each with a template + an instruction that guides the AI) plus an
 `apply` phase. A project picks one schema per change. This library provides
 schemas tuned to different **change shapes**.
 
-## Planned schemas
+## Schemas
 
 | Schema | Shape | Status |
 |---|---|---|
@@ -28,13 +28,119 @@ schemas tuned to different **change shapes**.
 | `refactor` | Change structure without changing behavior | ✅ Available |
 | `release` | Ship an existing system to production, safely & repeatedly | ✅ Available |
 
-### `greenfield-bootstrap` at a glance
+## Artifact flows
 
-Covers `DEFINE → PLAN → BUILD → VERIFY → REVIEW → SHIP` with an explicit
-verification/review feedback loop. Artifacts: product-brief, constitution,
-specs, architecture, api-contract, data-model, quality-strategy,
-observability, security-baseline, ux, project-scaffold, acceptance-and-review,
-tasks, launch-readiness.
+Each schema is a dependency DAG of artifacts feeding an `apply` phase. An
+artifact becomes available once its dependencies are complete. (GitHub renders
+these Mermaid graphs.)
+
+### `greenfield-bootstrap`
+
+`DEFINE → PLAN → BUILD → VERIFY → REVIEW → SHIP` — 14 artifacts + apply.
+
+```mermaid
+flowchart TD
+  product-brief --> constitution
+  product-brief --> specs
+  constitution --> specs
+  specs --> architecture
+  constitution --> architecture
+  architecture --> api-contract
+  architecture --> data-model
+  architecture --> quality-strategy
+  architecture --> observability
+  architecture --> security-baseline
+  architecture --> ux
+  architecture --> project-scaffold
+  specs --> acceptance-and-review
+  quality-strategy --> acceptance-and-review
+  architecture --> tasks
+  api-contract --> tasks
+  data-model --> tasks
+  quality-strategy --> tasks
+  observability --> tasks
+  security-baseline --> tasks
+  ux --> tasks
+  acceptance-and-review --> tasks
+  project-scaffold --> tasks
+  observability --> launch-readiness
+  security-baseline --> launch-readiness
+  project-scaffold --> launch-readiness
+  acceptance-and-review --> launch-readiness
+  tasks --> apply
+  launch-readiness --> apply
+  apply([apply])
+```
+
+### `feature`
+
+Add a capability to an existing system — 10 artifacts + apply. Concerns are
+deltas to the current baseline.
+
+```mermaid
+flowchart TD
+  proposal --> specs
+  proposal --> design
+  specs --> design
+  design --> api-contract
+  design --> data-model
+  design --> observability
+  design --> security-baseline
+  design --> ux
+  specs --> acceptance-and-review
+  design --> tasks
+  api-contract --> tasks
+  data-model --> tasks
+  observability --> tasks
+  security-baseline --> tasks
+  ux --> tasks
+  acceptance-and-review --> tasks
+  tasks --> apply
+  apply([apply])
+```
+
+### `bugfix`
+
+Debugging-first, strictly linear — 4 artifacts + apply. `fix` is blocked until
+`root-cause` is confirmed (the Iron Law).
+
+```mermaid
+flowchart TD
+  report --> root-cause
+  root-cause --> fix
+  fix --> tasks
+  tasks --> apply
+  apply([apply])
+```
+
+### `refactor`
+
+Behavior-preserving — 4 artifacts + apply. `safety-net` gates `target` and
+`tasks`.
+
+```mermaid
+flowchart TD
+  proposal --> safety-net
+  proposal --> target
+  safety-net --> target
+  target --> tasks
+  safety-net --> tasks
+  tasks --> apply
+  apply([apply])
+```
+
+### `release`
+
+Ship to production, linear with gates — 4 artifacts + apply.
+
+```mermaid
+flowchart TD
+  scope --> release-plan
+  release-plan --> preflight
+  preflight --> tasks
+  tasks --> apply
+  apply([apply])
+```
 
 ## Recommended tooling (optional)
 
