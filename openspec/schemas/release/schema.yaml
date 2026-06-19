@@ -1,0 +1,115 @@
+name: release
+version: 1
+description: >
+  Ship an existing system to production, safely and repeatedly: scope ->
+  plan -> pre-flight gates -> staged rollout -> verify. Every release is
+  reversible, observable, and incremental.
+artifacts:
+  - id: scope
+    generates: scope.md
+    description: Version, included changes, changelog, audience and risk
+    template: scope.md
+    instruction: |
+      Define exactly WHAT ships in this release.
+
+      Fill every template section:
+      - **Version**: the semantic version and tag.
+      - **Included Changes**: the changes/PRs in this release.
+      - **Changelog**: user-facing entries.
+      - **Audience & Risk**: who receives it and the risk level.
+
+      **Gathering inputs:** primary phase — gather what ships from the user and
+      the change history. Ask one question at a time with your best guess
+      attached; stop at ~95% confidence. If the user says "just draft it,"
+      proceed on explicit, listed assumptions.
+    requires: []
+
+  - id: release-plan
+    generates: release-plan.md
+    description: Versioning, migration ordering, rollout strategy, rollback plan, comms
+    template: release-plan.md
+    instruction: |
+      Plan a safe, reversible, incremental release.
+
+      Fill every template section:
+      - **Versioning**: the semver bump and rationale.
+      - **Migration & Ordering**: data/schema migrations and their order relative
+        to deploy; the backward-compatibility window.
+      - **Rollout Strategy**: canary / staged / blue-green; promotion criteria;
+        feature flags.
+      - **Rollback Plan**: the exact revert steps and the triggers that fire a
+        rollback.
+      - **Comms**: who to notify, when, and the announcement.
+
+      **Gathering inputs:** most inputs come from scope and the system — read
+      them first and reuse their answers; ask only about new decisions, one at a
+      time with your best guess; stop at ~95%. If told "just draft it," proceed
+      on explicit, listed assumptions.
+    requires:
+      - scope
+
+  - id: preflight
+    generates: preflight.md
+    description: Go/no-go readiness gates and sign-off
+    template: preflight.md
+    instruction: |
+      Run the go/no-go checklist. Do not ship while any gate is unmet.
+
+      Fill the checklist and section:
+      - **Go / No-Go Gates**: CI green on the release commit; lint/typecheck/build
+        clean; security audit (no critical/high vulns, no secrets); migrations
+        dry-run / reversible; observability & alerts ready; rollback verified;
+        changelog & comms ready.
+      - **Sign-off**: who approves go.
+
+      Mark each gate only with evidence — a failed gate is a no-go.
+
+      **Gathering inputs:** most inputs come from release-plan and CI/system
+      state — check them directly rather than asking; ask the user only for
+      sign-off. If told "just draft it," proceed on explicit, listed assumptions.
+    requires:
+      - release-plan
+
+  - id: tasks
+    generates: tasks.md
+    description: Rollout runbook checklist (Cut -> Stage -> Roll out -> Verify)
+    template: tasks.md
+    instruction: |
+      Turn the rollout into a trackable runbook. Every actionable item MUST be a
+      `- [ ] X.Y` checkbox; apply parses these.
+
+      Structure (ordered, with rollback triggers):
+      - `## 1. Cut`: bump version, update changelog, tag the release commit.
+      - `## 2. Stage`: deploy to staging; smoke test.
+      - `## 3. Roll out`: canary / first stage; monitor against the rollout
+        criteria; promote — or roll back if a trigger fires.
+      - `## 4. Verify`: production smoke + monitor dashboards/alerts; send comms.
+
+      **Gathering inputs:** inputs come from preflight/release-plan — read them
+      first; ask only about new decisions. If told "just draft it," proceed on
+      explicit, listed assumptions.
+    requires:
+      - preflight
+
+apply:
+  requires:
+    - tasks
+  tracks: tasks.md
+  instruction: |
+    Execute the rollout by working through tasks.md, halting on any failed gate.
+    This phase does not end at deploy — it ends after verification.
+
+    Loop:
+    1. Work the runbook in order. At each stage, check the monitoring signals
+       against the rollout criteria before promoting. Never promote without the
+       green evidence — evidence before assertions.
+    2. After full rollout, run the production smoke and confirm dashboards/alerts
+       are healthy, then send comms.
+
+    When something fails:
+    - **Tight loop**: a gate or stage fails -> HALT and roll back using the plan's
+      rollback steps. Do not push forward through a failing rollout.
+    - **Wide loop**: if the release surfaces a defect, open a `bugfix` change for
+      the root cause; if it surfaces a missing capability, that is a `feature`.
+
+    Stop and ask the human on any blocker rather than guessing.
