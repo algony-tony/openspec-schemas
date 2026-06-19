@@ -296,6 +296,40 @@ artifacts:
     requires:
       - architecture
 
+  - id: ux
+    generates: ux.md
+    description: User-facing experience — screens, components, tokens, accessibility; imports a prototype if provided
+    template: ux.md
+    instruction: |
+      Design the user-facing experience. If the project has no UI (a backend
+      service, CLI, or library), keep this thin: state "no UI, because …".
+
+      **If a prototype is provided** (a directory, an unzipped archive, or an
+      exported mockup — HTML, Figma export, screenshots): treat it as the source
+      of truth. Read/extract it (unzip if needed), inventory its screens,
+      components, states, and design tokens, and derive the spec from it — cite
+      the prototype path. Do not redesign what the prototype already decided.
+      **If no prototype**: design the UI from the specs and the product brief.
+
+      Fill every template section:
+      - **Source**: the prototype path (and format) or "from requirements".
+      - **Screens & Flows**: pages and the flows between them.
+      - **Component Inventory**: reusable components and their states
+        (loading / empty / error / success).
+      - **Design Tokens**: colors, typography, spacing, breakpoints.
+      - **Accessibility**: keyboard, focus order, ARIA, WCAG contrast targets.
+      - **Responsive / States**: breakpoint behavior and non-happy states.
+
+      Stay framework-agnostic — describe the UX, not a specific component library.
+
+      **Gathering inputs:** most inputs come from the dependency artifacts and any
+      provided prototype — read them first; ask the user only whether a prototype
+      exists and for decisions it doesn't settle, one at a time with your best
+      guess; stop at ~95%. If told "just draft it," proceed on explicit, listed
+      assumptions.
+    requires:
+      - architecture
+
   - id: project-scaffold
     generates: project-scaffold.md
     description: Repo layout, tooling, 12-factor config, CI/CD, IaC, local dev
@@ -391,6 +425,7 @@ artifacts:
       - quality-strategy
       - observability
       - security-baseline
+      - ux
       - acceptance-and-review
       - project-scaffold
 

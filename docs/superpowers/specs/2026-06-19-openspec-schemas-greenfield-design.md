@@ -104,7 +104,7 @@ or into the user-level override dir. Packaging is a later concern.
 
 ## 5. Flagship: `greenfield-bootstrap` artifact chain
 
-13 artifacts + an `apply` engine. `requires` shown is indicative; the exact DAG
+14 artifacts + an `apply` engine. `requires` shown is indicative; the exact DAG
 is finalized in the `schema.yaml`.
 
 | Segment | # | Artifact | Purpose | Primary source | requires |
@@ -119,9 +119,10 @@ is finalized in the `schema.yaml`.
 | PLAN | 8 | `observability` | "On-call three questions" → logs/metrics/traces, health checks, SLO/alerts | agent-skills observability-and-instrumentation | architecture |
 | PLAN | 9 | `security-baseline` | Trust boundaries, STRIDE, OWASP always-do, abuse cases, data classification | agent-skills security-and-hardening / gstack cso | architecture |
 | PLAN | 10 | `project-scaffold` | Repo layout, tooling, config/env (12-factor), CI/CD, IaC, local dev | agent-skills ci-cd / 12-factor | architecture |
-| VERIFY bar | 11 | `acceptance-and-review` | Per-requirement acceptance criteria, Definition of Done, code-review checklist, **requirements↔code traceability plan** | spec-kit /analyze / gstack reviews / superpowers code-review | specs, quality-strategy |
-| BUILD | 12 | `tasks` | TDD per build task (red/green/commit) + final `## Verification` and `## Review` phases | superpowers writing-plans / Kiro waves | architecture, api-contract, data-model, quality-strategy, observability, security-baseline, acceptance-and-review, project-scaffold |
-| SHIP | 13 | `launch-readiness` | Pre-launch checklist: CI green, observability wired, security pass, rollback/runbook, staging smoke | agent-skills shipping-and-launch / gstack land-and-deploy | observability, security-baseline, project-scaffold, acceptance-and-review |
+| PLAN | 11 | `ux` | Screens/flows, component inventory, design tokens, accessibility; **imports a prototype (dir/archive/mockup) if provided**; thin when no UI | agent-skills frontend-ui-engineering / gstack design-* | architecture |
+| VERIFY bar | 12 | `acceptance-and-review` | Per-requirement acceptance criteria, Definition of Done, code-review checklist, **requirements↔code traceability plan** | spec-kit /analyze / gstack reviews / superpowers code-review | specs, quality-strategy |
+| BUILD | 13 | `tasks` | TDD per build task (red/green/commit) + final `## Verification` and `## Review` phases | superpowers writing-plans / Kiro waves | architecture, api-contract, data-model, quality-strategy, observability, security-baseline, ux, acceptance-and-review, project-scaffold |
+| SHIP | 14 | `launch-readiness` | Pre-launch checklist: CI green, observability wired, security pass, rollback/runbook, staging smoke | agent-skills shipping-and-launch / gstack land-and-deploy | observability, security-baseline, project-scaffold, acceptance-and-review |
 
 `apply`: `requires: [tasks, launch-readiness]`, `tracks: tasks.md`, with the
 feedback-loop instruction from §6.

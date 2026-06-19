@@ -32,7 +32,7 @@ project-bootstrap-only artifacts drop out (a feature inherits them):
 | `project-scaffold` | repo already exists | — |
 | `launch-readiness` | per-feature ship = flag/rollout | folded into `design` Rollout; repeated release = future `release` schema |
 
-## Artifact chain (9 + apply)
+## Artifact chain (10 + apply)
 
 | # | artifact | generates | requires |
 |---|---|---|---|
@@ -43,8 +43,9 @@ project-bootstrap-only artifacts drop out (a feature inherits them):
 | 5 | `data-model` | data-model.md (delta) | design |
 | 6 | `observability` | observability.md (delta) | design |
 | 7 | `security-baseline` | security-baseline.md (delta) | design |
-| 8 | `acceptance-and-review` | acceptance-and-review.md | specs |
-| 9 | `tasks` | tasks.md (TDD + Verification + Review) | design, 4, 5, 6, 7, 8 |
+| 8 | `ux` | ux.md (UI delta; imports a prototype if provided) | design |
+| 9 | `acceptance-and-review` | acceptance-and-review.md | specs |
+| 10 | `tasks` | tasks.md (TDD + Verification + Review) | design, 4, 5, 6, 7, 8, 9 |
 | — | `apply` | tracks tasks.md | tasks |
 
 Reused from greenfield: the EARS spec deltas, the concern artifacts, the

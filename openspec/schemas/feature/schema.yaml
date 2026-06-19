@@ -172,6 +172,37 @@ artifacts:
     requires:
       - design
 
+  - id: ux
+    generates: ux.md
+    description: UX/frontend delta for the feature; imports a prototype if provided
+    template: ux.md
+    instruction: |
+      Describe this feature's change to the user-facing experience. If the
+      feature touches no UI, state "no UI change, because …" and keep it thin.
+
+      **If a prototype is provided** (a directory, an unzipped archive, or an
+      exported mockup): treat it as the source of truth for the new/changed
+      screens. Read/extract it (unzip if needed), inventory the changed screens,
+      components, states, and tokens, and derive the delta from it — cite the
+      prototype path. **If no prototype**: design the UI delta from the spec
+      delta and the existing UI conventions.
+
+      When there is a change, fill every template section:
+      - **Source**: the prototype path (and format) or "from requirements".
+      - **Changed Screens & Flows**: new/changed screens and flows.
+      - **Component Changes**: new/changed components and their states.
+      - **Accessibility**: keyboard, focus, ARIA, contrast for the new UI.
+
+      Stay framework-agnostic. Follow the existing design system/conventions.
+
+      **Gathering inputs:** most inputs come from the dependency artifacts and any
+      provided prototype — read them first; ask the user only whether a prototype
+      exists and for decisions it doesn't settle, one at a time with your best
+      guess; stop at ~95%. If told "just draft it," proceed on explicit, listed
+      assumptions.
+    requires:
+      - design
+
   - id: acceptance-and-review
     generates: acceptance-and-review.md
     description: Acceptance criteria, Definition of Done, review checklist, traceability
@@ -225,6 +256,7 @@ artifacts:
       - data-model
       - observability
       - security-baseline
+      - ux
       - acceptance-and-review
 
 apply:

@@ -32,8 +32,8 @@ schemas tuned to different **change shapes**.
 
 Covers `DEFINE → PLAN → BUILD → VERIFY → REVIEW → SHIP` with an explicit
 verification/review feedback loop. Artifacts: product-brief, constitution,
-requirements, architecture, api-contract, data-model, quality-strategy,
-observability, security-baseline, project-scaffold, acceptance-and-review,
+specs, architecture, api-contract, data-model, quality-strategy,
+observability, security-baseline, ux, project-scaffold, acceptance-and-review,
 tasks, launch-readiness.
 
 ## Recommended tooling (optional)
