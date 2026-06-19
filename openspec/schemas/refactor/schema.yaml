@@ -1,0 +1,125 @@
+name: refactor
+version: 1
+description: >
+  Change the structure of existing code without changing its observable
+  behavior. Safety-net first; every step keeps tests green; behavior changes are
+  out of scope (split them into a feature or bugfix).
+artifacts:
+  - id: proposal
+    generates: proposal.md
+    description: Why refactor, structural change, behavior that must stay identical, scope, impact
+    template: proposal.md
+    instruction: |
+      Establish WHY a structural change is needed and pin the behavior that must
+      not change. A refactor changes structure, never observable behavior.
+
+      Fill every template section:
+      - **Why**: the structural pain (duplication, unclear boundaries, an
+        unwieldy file). Comprehend the code before proposing change.
+      - **What Changes (structure only)**: the structural change.
+      - **Behavior That MUST Stay Identical**: inputs/outputs, side effects,
+        errors, ordering — the observable contract that stays exactly the same.
+      - **Scope**: in and out of scope.
+      - **Impact**: files/modules touched. The public API should NOT change — if
+        it must, this is a feature, not a refactor; stop and split it out.
+
+      **Gathering inputs:** primary phase — understand the code first. Ask one
+      question at a time with your best guess attached; stop at ~95% confidence.
+      If the user says "just draft it," proceed on explicit, listed assumptions.
+    requires: []
+
+  - id: safety-net
+    generates: safety-net.md
+    description: Existing coverage, gaps, characterization tests to add, green baseline
+    template: safety-net.md
+    instruction: |
+      Build the safety net that makes "no behavior change" verifiable BEFORE any
+      refactoring. You cannot refactor safely without tests pinning current
+      behavior.
+
+      Fill every template section:
+      - **Existing Coverage**: tests that already pin the behavior in scope.
+      - **Gaps**: behavior not currently covered.
+      - **Characterization Tests to Add**: tests to add first that capture the
+        CURRENT behavior (including quirks) so any regression is caught.
+      - **Green Baseline**: the command to run them; confirm all green before
+        starting.
+
+      **Gathering inputs:** read the proposal and the code under refactor; ask
+      only for missing facts, one at a time with your best guess; stop at ~95%.
+      If told "just draft it," proceed on explicit, listed assumptions.
+    requires:
+      - proposal
+
+  - id: target
+    generates: target.md
+    description: Current state, target state, refactoring moves, incremental sequence
+    template: target.md
+    instruction: |
+      Design the move from current structure to target structure as a series of
+      small, behavior-preserving steps.
+
+      Fill every template section:
+      - **Current State**: the structure and why it's problematic.
+      - **Target State**: the desired structure — clearer and less complex, not
+        necessarily fewer lines ("would a new team member understand this
+        faster?").
+      - **Refactoring Moves**: the specific behavior-preserving transformations
+        (extract, inline, rename, move, dedupe). Each must produce the same
+        output for every input, the same errors, and the same side effects.
+      - **Incremental Sequence**: ordered small steps, each of which keeps the
+        safety-net tests green.
+
+      **Gathering inputs:** most inputs come from proposal/safety-net and the
+      code — read them first and reuse their answers; ask only about new
+      decisions, one at a time with your best guess; stop at ~95%. If told "just
+      draft it," proceed on explicit, listed assumptions.
+    requires:
+      - proposal
+      - safety-net
+
+  - id: tasks
+    generates: tasks.md
+    description: Incremental behavior-preserving steps with a verification phase
+    template: tasks.md
+    instruction: |
+      Break the refactor into incremental, behavior-preserving steps. Every
+      actionable item MUST be a `- [ ] X.Y` checkbox; apply parses these.
+
+      Structure:
+      - One `## N. <step>` per incremental move. Each step: make one
+        behavior-preserving change -> run the safety-net tests and confirm they
+        are still green WITHOUT modifying them -> commit. Small steps; commit
+        often.
+      - End with `## Verification`: full safety-net + affected suite green (no
+        test changes), no public API/behavior change, lint/typecheck/build pass.
+
+      **Gathering inputs:** inputs come from target/safety-net — read them first;
+      ask only about new decisions, one at a time with your best guess; stop at
+      ~95%. If told "just draft it," proceed on explicit, listed assumptions.
+    requires:
+      - target
+      - safety-net
+
+apply:
+  requires:
+    - tasks
+  tracks: tasks.md
+  instruction: |
+    Execute the refactor incrementally, then verify behavior is unchanged. This
+    phase does not end when the code is moved.
+
+    Loop:
+    1. Take the next step. Make one behavior-preserving change, run the
+       safety-net tests, and confirm they pass WITHOUT modification. Commit.
+       Never claim a step done without the green evidence.
+    2. After all steps, run the full safety-net + affected suite and confirm no
+       behavior or public-API change.
+
+    When something fails:
+    - **Tight loop**: a step turned a test red -> you changed behavior. Revert
+      that step and redo it as a true behavior-preserving move.
+    - **Wide loop**: if you discover the behavior SHOULD change, stop — that is a
+      feature or bugfix, not a refactor. Split it into a separate change.
+
+    Stop and ask the human on any blocker rather than guessing.
