@@ -23,7 +23,7 @@ schemas tuned to different **change shapes**.
 | Schema | Shape | Status |
 |---|---|---|
 | `greenfield-bootstrap` | New full-stack project → verified, launch-ready MVP | ✅ Available |
-| `feature` | Add a capability to an existing system | Planned |
+| `feature` | Add a capability to an existing system | ✅ Available |
 | `bugfix` | Reproduce → root cause → fix → regression | Planned |
 | `refactor`, `release`, … | Various | Planned |
 

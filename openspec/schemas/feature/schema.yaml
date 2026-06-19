@@ -1,0 +1,261 @@
+name: feature
+version: 1
+description: >
+  Add a capability to an existing system. Concern artifacts (api, data,
+  observability, security) are deltas to the current baseline; project-level
+  context (constitution, quality strategy) is inherited from openspec config.
+artifacts:
+  - id: proposal
+    generates: proposal.md
+    description: Why, what changes, scope, affected capabilities and code, impact
+    template: proposal.md
+    instruction: |
+      Establish WHY this feature is needed and WHAT it changes in the existing
+      system. Read the relevant existing specs (openspec/specs/) and code first
+      so the proposal builds on reality, not assumptions.
+
+      Fill every template section:
+      - **Why**: the problem/opportunity in 1–2 sentences. Why now?
+      - **What Changes**: new / modified / removed behavior. Mark **BREAKING**.
+      - **Scope**: in-scope and explicit out-of-scope.
+      - **Affected Capabilities & Code**: which existing capabilities (spec
+        folders) and code areas this touches — this drives the spec deltas.
+      - **Impact**: users, APIs, data, dependencies, operational impact.
+
+      **Gathering inputs:** this is a primary interview phase for the feature —
+      gather what is wanted and read the existing system. Ask one question at a
+      time with your best guess attached; stop at ~95% confidence. If the user
+      says "just draft it," proceed on explicit, listed assumptions.
+    requires: []
+
+  - id: specs
+    generates: "specs/**/*.md"
+    description: Spec deltas (ADDED/MODIFIED/REMOVED) in EARS form with acceptance scenarios
+    template: spec.md
+    instruction: |
+      Define WHAT changes as spec deltas against the existing capabilities named
+      in the proposal. Create one file per affected capability at
+      `specs/<capability>/spec.md` (use the existing folder name).
+
+      Delta operations (use `##` headers):
+      - **ADDED Requirements**: new behavior.
+      - **MODIFIED Requirements**: copy the ENTIRE existing requirement block from
+        openspec/specs/<capability>/spec.md, then edit it (partial content loses
+        detail at archive time).
+      - **REMOVED Requirements**: include **Reason** and **Migration**.
+
+      Format:
+      - `### Requirement: <name>` in EARS form (WHEN/IF/WHILE … the system SHALL …;
+        use SHALL/MUST, avoid should/may).
+      - Every requirement has at least one `#### Scenario:` with WHEN/THEN — each
+        scenario is a test case. Scenarios MUST use exactly four hashtags.
+
+      **Gathering inputs:** primary interview for the feature's behavior. Read the
+      existing specs first; ask only about behavior not already settled, one
+      question at a time with your best guess; stop at ~95%. If told "just draft
+      it," proceed on explicit, listed assumptions.
+    requires:
+      - proposal
+
+  - id: design
+    generates: design.md
+    description: Approach, key decisions/ADRs, architecture impact, rollout/flag
+    template: design.md
+    instruction: |
+      Explain HOW the feature is implemented within the existing architecture.
+
+      Fill every template section:
+      - **Approach**: how it fits the current design and conventions (inherited
+        from the project constitution).
+      - **Key Decisions**: significant choices as ADRs (Context / Decision /
+        Consequences / Alternatives). Skip if the feature is mechanical.
+      - **Architecture Impact**: new or changed components/boundaries — or
+        explicitly "no architectural change".
+      - **Rollout**: feature flag, migration ordering, gradual rollout, and
+        backward compatibility.
+
+      **Gathering inputs:** most inputs come from the proposal/specs and the
+      existing system — read them first and reuse their answers; don't re-ask.
+      Ask the user only about decisions this feature newly introduces, one at a
+      time with your best guess; stop at ~95%. If told "just draft it," proceed
+      on explicit, listed assumptions.
+    requires:
+      - proposal
+      - specs
+
+  - id: api-contract
+    generates: api-contract.md
+    description: API delta — changed surfaces, contract, error model, compatibility
+    template: api-contract.md
+    instruction: |
+      Describe this feature's change to the API surface as a delta. If the
+      feature touches no interface, state "no API change" with a one-line reason
+      and keep this thin.
+
+      When there is a change, fill every template section:
+      - **Changed Surfaces**: the new/changed endpoints or operations.
+      - **Contract**: request/response shapes and status codes (contract-first).
+      - **Error Model**: new or changed error cases; don't leak internals.
+      - **Versioning & Compatibility**: keep existing consumers working (Hyrum's
+        Law); prefer extending over breaking; define deprecation if needed.
+
+      **Gathering inputs:** most inputs come from the dependency artifacts and the
+      existing API — read them first; ask only about new decisions, one at a time
+      with your best guess; stop at ~95%. If told "just draft it," proceed on
+      explicit, listed assumptions.
+    requires:
+      - design
+
+  - id: data-model
+    generates: data-model.md
+    description: Data delta — changed entities, migration, lifecycle
+    template: data-model.md
+    instruction: |
+      Describe this feature's change to the data model as a delta. If the feature
+      touches no data, state "no data change" with a one-line reason and keep it
+      thin.
+
+      When there is a change, fill every template section:
+      - **Changed Entities**: new/changed entities, fields, relationships.
+      - **Migration**: forward + rollback migration and any backfill.
+      - **Lifecycle & Retention**: classification/retention for new data;
+        coordinate sensitive data with security-baseline.
+
+      **Gathering inputs:** most inputs come from the dependency artifacts and the
+      existing schema — read them first; ask only about new decisions, one at a
+      time with your best guess; stop at ~95%. If told "just draft it," proceed
+      on explicit, listed assumptions.
+    requires:
+      - design
+
+  - id: observability
+    generates: observability.md
+    description: Observability delta — on-call questions, new signals, alerts/SLOs
+    template: observability.md
+    instruction: |
+      Describe the telemetry this feature adds so it is diagnosable in production.
+      A user-facing feature almost always needs at least one new signal; only
+      state "covered by existing signals" when that is genuinely true.
+
+      Fill every template section:
+      - **On-call Questions**: 1–3 questions on-call will ask about this feature.
+      - **New Signals**: the logs/metrics/traces that answer them (structured
+        logs: stable event name + fields).
+      - **Alerts / SLO Impact**: new or changed alerts/SLOs.
+
+      **Gathering inputs:** most inputs come from the dependency artifacts and the
+      existing observability baseline — read them first; ask only about new
+      decisions, one at a time with your best guess; stop at ~95%. If told "just
+      draft it," proceed on explicit, listed assumptions.
+    requires:
+      - design
+
+  - id: security-baseline
+    generates: security-baseline.md
+    description: Security delta — new surface STRIDE, controls, abuse cases
+    template: security-baseline.md
+    instruction: |
+      Threat-model the new attack surface this feature introduces. If it adds no
+      new surface, state "no new surface" with a one-line reason and keep it thin.
+
+      When there is new surface, fill every template section:
+      - **New / Changed Trust Boundaries**: where new untrusted input enters.
+      - **STRIDE (new surface)**: threats + mitigations for that boundary.
+      - **Controls**: auth, validation, secrets, and data handling for the change
+        (OWASP always-do controls still apply).
+      - **Abuse Cases**: how it could be misused → make those the first tests.
+
+      **Gathering inputs:** most inputs come from the dependency artifacts and the
+      project security baseline — read them first; ask only about new decisions,
+      one at a time with your best guess; stop at ~95%. If told "just draft it,"
+      proceed on explicit, listed assumptions.
+    requires:
+      - design
+
+  - id: acceptance-and-review
+    generates: acceptance-and-review.md
+    description: Acceptance criteria, Definition of Done, review checklist, traceability
+    template: acceptance-and-review.md
+    instruction: |
+      Set the bar for "done" and "correct" for this feature before coding.
+
+      Fill every template section:
+      - **Acceptance Criteria (per requirement)**: restate each spec requirement's
+        testable criteria — the yardstick for conformance.
+      - **Definition of Done**: tests pass, telemetry added, docs updated,
+        reviewed, traceability green.
+      - **Code-Review Checklist**: correctness, boundaries respected, error
+        handling, security controls, tests present.
+      - **Requirements ↔ Code Traceability**: a row per requirement mapping it to
+        the tests/evidence that prove it.
+
+      During apply, drift in this table triggers the wide feedback loop: stop and
+      amend the spec delta as a follow-up change.
+
+      **Gathering inputs:** most inputs come from the spec delta — read it first;
+      ask only about new decisions, one at a time with your best guess; stop at
+      ~95%. If told "just draft it," proceed on explicit, listed assumptions.
+    requires:
+      - specs
+
+  - id: tasks
+    generates: tasks.md
+    description: TDD build checklist with explicit Verification and Review phases
+    template: tasks.md
+    instruction: |
+      Break the feature into a trackable checklist. Every actionable item MUST be
+      a `- [ ] X.Y` checkbox; apply parses these to track progress.
+
+      Structure:
+      - Group build work under `## N. <Phase>` headings, ordered by dependency.
+      - Expand each build task into TDD steps: write the failing test -> run it
+        and watch it fail -> write minimal code to pass -> run and confirm pass ->
+        commit. Each task ends with an independently testable deliverable.
+      - End with two explicit phases: `## Verification` (affected/full suite,
+        lint, typecheck, build, observability/security smoke) and `## Review`
+        (code review against acceptance-and-review + traceability green).
+
+      **Gathering inputs:** most inputs come from the dependency artifacts — read
+      them first; ask only about new decisions, one at a time with your best
+      guess; stop at ~95%. If told "just draft it," proceed on explicit, listed
+      assumptions.
+    requires:
+      - design
+      - api-contract
+      - data-model
+      - observability
+      - security-baseline
+      - acceptance-and-review
+
+apply:
+  requires:
+    - tasks
+  tracks: tasks.md
+  instruction: |
+    Implement the feature by working through tasks.md, then verify and review.
+    This phase does not end when code is written.
+
+    Loop:
+    1. Take the next unchecked task. Follow TDD: write the failing test, watch it
+       fail, write minimal code to pass, refactor, commit. Mark the checkbox done
+       only when its tests pass.
+    2. Run the `## Verification` and `## Review` phases as gates. Never claim a
+       task or the feature "done" without showing the green evidence — evidence
+       before assertions.
+    3. Check conformance against acceptance-and-review: every requirement's
+       acceptance criteria must have passing evidence in the traceability table.
+
+    When something fails, choose the loop by radius:
+    - **Tight loop** (implementation defect / failing test / review nit): debug
+      methodically — reproduce, root cause, fix, re-verify — and stay in this
+      phase. Do not patch symptoms.
+    - **Wide loop** (a requirement is wrong, missing, or ambiguous): stop, surface
+      it, and amend the spec delta as a follow-up change. Never silently work
+      around a spec gap.
+
+    Browser verification (tool-agnostic): when UI acceptance needs a browser, use
+    a browser automation tool (e.g. Playwright, chrome-devtools-mcp, or gstack
+    `browse`). Prompt the human to install and run it, and proceed only after
+    explicit consent — nothing is bundled.
+
+    Stop and ask the human on any blocker rather than guessing.
