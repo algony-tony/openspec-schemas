@@ -269,6 +269,24 @@ artifacts:
     generates: acceptance-and-review.md
     description: Acceptance criteria, Definition of Done, code-review checklist, requirements-to-code traceability
     template: acceptance-and-review.md
+    instruction: |
+      Set the bar for "done" and "correct" before any code is written, so
+      verification is not improvised at the end.
+
+      Fill every template section:
+      - **Acceptance Criteria (per requirement)**: restate each requirement's
+        testable criteria — this is the yardstick for whether the code matches
+        the requirements.
+      - **Definition of Done**: the checklist that marks work complete (tests
+        pass, telemetry added, docs updated, reviewed, traceability green).
+      - **Code-Review Checklist**: what a reviewer must verify (correctness,
+        boundaries respected, error handling, security controls, tests present).
+      - **Requirements ↔ Code Traceability**: a table mapping every requirement
+        to the tests/evidence that prove it. Every requirement gets a row.
+
+      During apply, drift in this table (a requirement with no passing evidence,
+      or behavior that contradicts a requirement) triggers the wide feedback
+      loop: stop and amend requirements as a follow-up change.
     requires:
       - requirements
       - quality-strategy
@@ -277,6 +295,25 @@ artifacts:
     generates: tasks.md
     description: TDD build checklist with explicit Verification and Review phases
     template: tasks.md
+    instruction: |
+      Break the build into a trackable checklist. The apply phase parses
+      checkbox format to track progress, so every actionable item MUST be a
+      `- [ ] X.Y` checkbox; items not in this format are not tracked.
+
+      Structure:
+      - Group build work under `## N. <Phase>` headings, ordered by dependency
+        (what must exist first). Independent tasks can run in parallel "waves".
+      - Expand each build task into TDD steps: write the failing test -> run it
+        and watch it fail -> write the minimal code to pass -> run and confirm
+        pass -> commit. Each task ends with an independently testable deliverable.
+      - End with two explicit phases, not just build:
+        - `## Verification`: run the full test suite, lint, typecheck, build, and
+          an observability/security smoke.
+        - `## Review`: code review against the acceptance-and-review checklist,
+          and confirm the requirements-to-code traceability table is green.
+
+      Reference the specs for what to build and architecture/api/data for how.
+      Each task must be verifiable — you know when it is done.
     requires:
       - architecture
       - api-contract
@@ -289,6 +326,20 @@ artifacts:
     generates: launch-readiness.md
     description: Pre-launch checklist, rollback plan, runbook
     template: launch-readiness.md
+    instruction: |
+      Confirm the MVP is ready to go live. This is the final artifact; repeated
+      production releases are out of scope (a future `release` schema).
+
+      Fill every template section:
+      - **Pre-Launch Checklist**: verify CI is green on main, observability is
+        wired (dashboards/alerts live), security-baseline controls are in place,
+        a rollback plan and runbook exist, and a staging smoke test has passed.
+      - **Rollback Plan**: exactly how to revert a bad launch.
+      - **Runbook**: the operational notes on-call needs (key dashboards, alerts,
+        common failure modes, escalation).
+
+      Do not mark launch-ready while any checklist item is unmet — evidence
+      before the claim.
     requires:
       - observability
       - security-baseline
