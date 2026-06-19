@@ -351,3 +351,34 @@ apply:
     - tasks
     - launch-readiness
   tracks: tasks.md
+  instruction: |
+    Implement the project by working through tasks.md, then verify, review, and
+    confirm launch readiness. This phase does not end when code is written.
+
+    Loop:
+    1. Take the next unchecked task. Follow TDD: write the failing test, watch it
+       fail, write the minimal code to pass, refactor, commit. Mark the checkbox
+       done only when its tests pass.
+    2. Run the `## Verification` and `## Review` phases as gates. Never claim a
+       task or the build "done" without showing the green evidence (test output,
+       lint/typecheck/build results) — evidence before assertions.
+    3. Check conformance against acceptance-and-review: every requirement's
+       acceptance criteria must have passing evidence in the traceability table.
+
+    When something fails, choose the loop by radius:
+    - **Tight loop** (implementation defect / failing test / review nit): debug
+      methodically — reproduce, find the root cause, fix, re-verify — and stay in
+      this phase. Do not patch symptoms.
+    - **Wide loop** (a requirement is wrong, missing, or ambiguous — the work
+      reveals spec/implementation drift): stop, surface it, and amend the
+      requirements/specs as a follow-up change. Never silently work around a spec
+      gap.
+
+    Browser verification (tool-agnostic): when UI acceptance needs a browser, use
+    a browser automation tool (e.g. Playwright, chrome-devtools-mcp, or gstack
+    `browse`). Prompt the human to install and run it, and proceed only after
+    explicit consent — nothing is bundled.
+
+    Stop and ask the human on any blocker rather than guessing. Finish by
+    confirming launch-readiness: do not declare launch-ready while any checklist
+    item is unmet.
