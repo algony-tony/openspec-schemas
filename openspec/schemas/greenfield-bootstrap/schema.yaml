@@ -373,6 +373,17 @@ artifacts:
     instruction: |
       Define how the project is set up so anyone can build, run, and ship it.
 
+      HARD RULES — self-check before you save:
+      1. KEEP the template's section headings verbatim — especially
+         `## Run & Entry`. Do NOT replace the template's sections with your own
+         scheme (e.g. "Bootstrap Commands" / "Key Dependencies"). Fill the
+         template; don't rewrite its structure.
+      2. `## Run & Entry` MUST give ONE command that runs the whole app, the ONE
+         entry URL a user opens, and how frontend & backend connect. If they are
+         separate servers, name which URL is the app and ensure the backend root
+         does NOT 404 for a user (backend serves the built SPA, a dev proxy, or a
+         redirect). An API-only backend whose root 404s is not an acceptable entry.
+
       Fill every template section:
       - **Repo Layout**: the directory structure and what each part is
         responsible for (split by responsibility, not by technical layer).
@@ -391,6 +402,9 @@ artifacts:
         de-facto entry.
       - **IaC & Local Dev**: an infrastructure-as-code baseline and exact local
         setup commands (clone -> install -> run in as few steps as possible).
+
+      Self-check before saving: is there a `## Run & Entry` section with a single
+      run command and a named entry URL whose root does not 404?
 
       **Clarifying before drafting:** read the dependency artifacts and the
       codebase first and reuse their answers. Then list the *material* unknowns —
@@ -445,43 +459,50 @@ artifacts:
     description: TDD build checklist with explicit Verification and Review phases
     template: tasks.md
     instruction: |
-      Break the build into a trackable checklist. The apply phase parses
-      checkbox format to track progress, so every actionable item MUST be a
-      `- [ ] X.Y` checkbox; items not in this format are not tracked.
+      The apply phase parses this file's `- [ ] X.Y` checkboxes to track
+      progress, so every actionable item MUST be a checkbox; untracked items are
+      ignored.
 
-      Structure:
-      - Group build work under `## N. <Phase>` headings, ordered by dependency
-        (what must exist first). Independent tasks can run in parallel "waves".
-      - Granularity: one checkbox per STEP (~2-5 minutes), NOT one per file. Each
-        unit of behavior expands to its own steps — write the failing test, run
-        it and watch it fail, write the minimal code to pass, run and confirm
-        pass, commit (superpowers writing-plans granularity). "Create file X with
-        A, B, C" is too coarse: split it. A real full-stack MVP is dozens of
-        steps, not a dozen.
-      - Coverage: every PLAN artifact must be realized as concrete build tasks —
-        api-contract (each endpoint), data-model (each entity/migration),
-        quality-strategy (each test level), observability (each signal, health,
-        SLO), security-baseline (each control + abuse-case test), ux (each
-        screen/flow). A concern with a planning doc but no build task is a gap;
-        trace each artifact to its tasks.
-      - Durability: include tasks to persist the foundational knowledge as living
-        repo docs under `docs/` (architecture + key ADRs, observability strategy,
-        security baseline) and commit them. When the change is archived only the
-        delta specs merge into `openspec/specs/`; everything else is moved to
-        `changes/archive/`, so the repo `docs/` (plus the merged specs and the
-        constitution synced to config) are what keep this knowledge alive.
-      - End with two explicit phases, not just build:
-        - `## Verification`: run the full test suite, lint, typecheck, build;
-          then RUN THE APP the way a user does (the project-scaffold run command),
-          open its entry URL, and confirm it serves a working page — not
-          404/blank — and that one core user flow works end-to-end; plus an
-          observability/security smoke. A green test suite is NOT sufficient:
-          the running app must actually serve its documented entry.
-        - `## Review`: code review against the acceptance-and-review checklist,
-          and confirm the requirements-to-code traceability table is green.
+      HARD RULES — a tasks.md that breaks these is not acceptable; self-check
+      against them before you save:
+      1. KEEP the template's structure: build phases first, then a
+         `## Verification` heading, then a `## Review` heading — verbatim and in
+         that order. NEVER rename, merge, drop, or replace `## Verification` /
+         `## Review` with your own scheme (e.g. a trailing "tests" or "收尾" phase).
+      2. One checkbox = one STEP (~2-5 min), NOT one per file:
+         ✅ `- [ ] Write the failing test for price-difference` /
+            `- [ ] Run it — watch it fail` / `- [ ] Minimal code to pass` /
+            `- [ ] Run — confirm pass` / `- [ ] Commit`
+         ❌ `- [ ] Create part.py (model + schema + crud)`
+         Splitting "create file X with A, B, C" into its steps is mandatory. A
+         real full-stack MVP is dozens of steps, not a dozen.
+      3. Tests INTERLEAVE with code (TDD) — never batched into one trailing test
+         phase. Every unit of behavior gets its own failing-test-first cycle,
+         frontend included; a build phase with code but no adjacent tests is wrong.
+      4. `## Verification` MUST include a checkbox that runs the app the way a user
+         does (the project-scaffold run command), opens the entry URL, and confirms
+         it serves a working page — NOT 404/blank — plus one core user flow
+         end-to-end and an observability/security smoke. A green test suite alone
+         is NOT sufficient.
+      5. Every PLAN artifact must appear as ≥1 concrete task — api-contract (each
+         endpoint), data-model (each entity/migration), quality-strategy (each test
+         level), observability (each signal/health/SLO), security-baseline (each
+         control + abuse-case test), ux (each screen/flow). Include a durability
+         task that writes architecture + key ADRs, observability, and security into
+         the repo `docs/` tree and commits them — on archive only delta specs merge
+         into `openspec/specs/`, so `docs/` is what keeps this knowledge alive.
 
-      Reference the specs for what to build and architecture/api/data for how.
-      Each task must be verifiable — you know when it is done.
+      Build the checklist: group work under `## N. <Phase>` headings ordered by
+      dependency (independent phases run as parallel "waves"); `## Review` does a
+      code review against the acceptance-and-review checklist and confirms the
+      requirements-to-code traceability table is green. Reference the specs for
+      what to build and architecture/api/data for how; each task must be verifiable.
+
+      Self-check before saving — fix any miss, do not save until all pass: does the
+      file contain `## Verification` (with the run-app/entry-URL line) and
+      `## Review`? Is every checkbox a single ~2-5 min step, not a whole file? Are
+      tests interleaved rather than batched? Does every PLAN artifact have a task,
+      including the `docs/` durability task?
 
       **Clarifying before drafting:** read the dependency artifacts and the
       codebase first and reuse their answers. Then list the *material* unknowns —
@@ -553,6 +574,9 @@ apply:
        lint/typecheck/build results) — evidence before assertions. A green test
        suite is not proof the app works: the Verification phase must include
        actually running the app and confirming its entry URL serves (not 404).
+       If `tasks.md` lacks a `## Verification` or `## Review` section, treat it as
+       a generation defect and add the missing phase (including the run-app/
+       entry-URL check) before continuing — the build is not done without it.
     3. Check conformance against acceptance-and-review: every requirement's
        acceptance criteria must have passing evidence in the traceability table.
 
